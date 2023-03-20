@@ -1,9 +1,108 @@
 {% extends 'base.html' %}
 
+
 {% block title %}Home - Senthur Traders {% endblock %}
 
+{% block head %} 
+<style>
+    
+    .logo-name{
+        color: #0D47A1;
+        font-family:Arial, sans-serif;
+        font-size: 13px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+    }
+    .logo-image{
+        max-width: 50px; 
+        height: auto;
+    }
+    .navbar-dark .navbar-nav .nav-link {
+    color: rgb(111, 0, 255);
+    }
+    html, body {
+    height: 100%;
+  }
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  .content {
+    flex: 1;
+  }
+  body {
+  padding-top: 80px; 
+  background-image: url('{{url_for("static", filename="background.jpg")}}');
+  background-size: cover;
+}
+
+</style>
+{% endblock %}
+
 {% block body %}
-<a href="/employee/login.html"> employee </a><br>
-<a href = "/customer/">customer</a>
+<!--header-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='logo.png')}}" alt="Senthur Traders" class="logo-image">
+        <span class="logo-name">Senthur Traders</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Location</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<!--header end-->
+<div class="wrapper">
+    <div class="content">
+        <!--content here-->
+
+
+    </div>
+<!--footer-->
+<footer class="bg-dark text-light py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h4>Contact Us</h4>
+          <ul class="list-unstyled">
+            <li><i class="bi bi-phone"></i> +91 95664 12523</li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h4>Location</h4>
+          <p>Palladam Main Road, Murugampalayam,Tiruppur - 641 687</p>
+        </div>
+        <div class="col-md-4">
+          <p class="text-end">&copy; 2023 Senthur Traders. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+  
+<!--footer end-->  
 
 {% endblock %}
