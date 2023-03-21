@@ -37,13 +37,17 @@
   }
   body {
   padding-top: 80px; 
-  background-image: url('{{url_for("static", filename="background.jpg")}}');
+  
   background-size: cover;
 }
 
 .modal-content {
   background-color: #afe2b1;
 }
+.btn-secondary:hover {
+  background-color: #d48235;
+}
+
 
 
 </style>
@@ -73,7 +77,7 @@
             <a class="nav-link" href="#">Contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal">Login</a>
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal">Login/SignUp</a>
           </li>
         </ul>
       </div>
@@ -83,18 +87,24 @@
 <div class="wrapper">
     <div class="content">
         <!--content here-->
+    
+        <div class="container">
+          <div class="row justify-content-center my-5">
+              <div class="col-lg-8 text-center">
+                  <h1 class="display-4 mb-3">Senthur Traders</h1>
+                  <p class="lead mb-5">Welcome to Senthur Traders, your </p></div></div></div>
 
 <!-- Alert dialog box -->
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered ">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Login as</h5>
+        <h5 class="modal-title" id="exampleModalLabel">SignUp/Login as</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <a href="#"><p>Customer</p></a>
-        <a href="#"><p>Employee</p></a>
+        <a href="#" class="btn btn-secondary"><p>Customer</p></a>
+        <a href="#" class="btn btn-secondary"><p>Employee</p></a>
       </div>
     </div>
   </div>
@@ -102,7 +112,7 @@
 
 
 
-    </div>
+</div>
 <!--footer-->
 <footer class="bg-dark text-light py-4">
     <div class="container">
