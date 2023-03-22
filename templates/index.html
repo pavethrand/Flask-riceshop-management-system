@@ -17,7 +17,7 @@
         letter-spacing: .08em;
     }
     .logo-image{
-        max-width: 50px; 
+        max-width: 60px; 
         height: auto;
     }
     .navbar-dark .navbar-nav .nav-link {
@@ -37,7 +37,7 @@
   }
   body {
   padding-top: 80px; 
-  
+  background-color: #cdecc7;
   background-size: cover;
 }
 
@@ -57,8 +57,8 @@
 <!--header-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img src="{{url_for('static',filename='logo.png')}}" alt="Senthur Traders" class="logo-image">
-        <span class="logo-name">Senthur Traders</span></a>
+      <img src="{{url_for('static',filename='logo.png')}}" alt="Senthur Traders" class="logo-image">
+        <span class="logo-name">Senthur Traders</span>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -68,13 +68,13 @@
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Products</a>
+            <a class="nav-link" href="#products">Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Location</a>
+            <a class="nav-link" href="#location">Location</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="#contact">Contact</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal">Login/SignUp</a>
@@ -84,15 +84,179 @@
     </div>
   </nav>
 <!--header end-->
-<div class="wrapper">
-    <div class="content">
         <!--content here-->
     
         <div class="container">
           <div class="row justify-content-center my-5">
               <div class="col-lg-8 text-center">
-                  <h1 class="display-4 mb-3">Senthur Traders</h1>
-                  <p class="lead mb-5">Welcome to Senthur Traders, your </p></div></div></div>
+                  <h1 class="display-4 mb-3" style="font-weight: bold; font-size: 3rem;"><img src="{{url_for('static',filename='logo.png')}}" alt="logo">SENTHUR TRADERS</h1><br>
+                  <p class="lead mb-5 fw-medium">
+                    Welcome to Senthur Traders, your one-stop destination for high-quality rice! We offer over 25 different types of rice, carefully selected and sourced to meet the needs of our customers.
+                  </p>
+                  <p class="lead mb-5 fw-medium">At Senthur Traders, we understand that every customer has unique preferences and tastes, which is why we offer a special order service for any rice that may not be currently available in our store. Simply let us know your requirements, and we'll do our best to source the rice you need.</p>
+                  <p class="lead mb-5 fw-medium">Our online web application allows for easy customer and employee login, providing a hassle-free way to manage the ordering process. Whether you're a regular customer or a first-time visitor, we aim to make your shopping experience with us as smooth and convenient as possible.</p>
+                  <p class="lead mb-5 fw-medium">Thank you for choosing Senthur Traders as your go-to source for rice. We look forward to serving you!</p>
+
+                  <h2 class="mb-3" id="products" style="font-weight: bold; font-size: 2.5rem;">Products</h2>
+                  <h3 class="mb-3">Brands</h3>
+                  <div class="row">
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Annamalai</h5>
+                          <p class="card-text">Available in 10kg and 26kg bags</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Ragavendhra</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Ramakrishna</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Gokulam</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Ramana</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Jaya dhanam</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Sangu</h5>
+                          <p class="card-text">Available in 10kg and 26kg bags</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Aadhiyogi</h5>
+                          <p class="card-text">Available in 10kg and 26kg bags</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Mahalakshmi</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">VIP gold Idly arisi</h5>
+                          <p class="card-text">Available in 5kg and 10kg bags</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Bell Idly arisi</h5>
+                          <p class="card-text">Available in 5kg, 10kg and 26kg bags</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Sivaji</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">SSB</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Nila</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Kannika</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Rajagopuram Kurunai</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                      <div class="card h-100">
+                        <div class="card-body">
+                          <h5 class="card-title">Anamalai Kurunai</h5>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- add more rice brands here using the same card layout -->
+                  </div>
+                  <div class="container my-5">
+                    <div class="row justify-content-center">
+                      <div class="col-lg-8 text-center">
+                        <h3 class="mb-3" id="location" style="font-weight: bold; font-size: 2.5rem;">Our Locations</h3>
+                        <p class="mb-5 fw-medium">Visit us at our main location:</p>
+                        <h5 class="mb-3" style="font-weight: bold;">Senthur Traders</h5>
+                        <p class="mb-5">Palladam Main Road, Murugampalayam, Tiruppur - 641 687</p>
+                        <p class="mb-5 fw-medium">Coming soon to Coimbatore and Erode!</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="container">
+                    <h2 id="contact">Contact Information</h2>
+                    <p>Name: <b>K M Nithesh Saran</b></p>
+                    <p>Phone Numbers: </p>
+                    <ul class="list-unstyled">
+                      <li><a href="tel:+919566412523">95664 12523</a></li>
+                      <li><a href="tel:+917904427583">79044 27583</a></li>
+                    </ul>
+                    <p>Email: <a href="mailto:senthurtraderstiruppur@gmail.com">senthurtraderstiruppur@gmail.com</a></p>
+                  </div>
+                  
+                  
+              </div></div></div>
+
+
+
+
+
+
+
 
 <!-- Alert dialog box -->
 <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -109,32 +273,4 @@
     </div>
   </div>
 </div>
-
-
-
-</div>
-<!--footer-->
-<footer class="bg-dark text-light py-4">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h4>Contact Us</h4>
-          <ul class="list-unstyled">
-            <li><i class="bi bi-phone"></i> +91 95664 12523</li>
-          </ul>
-        </div>
-        <div class="col-md-4">
-          <h4>Location</h4>
-          <p>Palladam Main Road, Murugampalayam,Tiruppur - 641 687</p>
-        </div>
-        <div class="col-md-4">
-          <p class="text-end">&copy; 2023 Senthur Traders. All rights reserved.</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-</div>
-  
-<!--footer end-->  
-
 {% endblock %}
