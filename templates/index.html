@@ -277,7 +277,7 @@
           </div>
           <button type="submit" class="btn btn-primary mb-3">Login</button>
         </form>
-        <p>Don't have an account? <a href="#">Sign up</a></p>
+        <p>Don't have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#customerSignUp" data-bs-dismiss="modal">Sign up</a></p>
         <p>Forgot your password? <a href="#">Reset</a></p>
       </div>
     </div>
@@ -293,10 +293,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <form>
+        <form action="/v" method="post">
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" required>
+            <input type="text" name="username" class="form-control" id="username" required>
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
@@ -309,4 +309,46 @@
     </div>
   </div>
 </div>
+
+<!---customer signup-->
+<div class="modal fade" id="customerSignUp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Customer Sign Up</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <form>
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" required>
+          </div>
+          <div class="mb-3">
+            <label for="firstname" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstname" required>
+          </div>
+          <div class="mb-3">
+            <label for="lastname" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastname" required>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" class="form-control" id="address" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="retypepassword" class="form-label">Retype Password</label>
+            <input type="password" class="form-control" id="retypepassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary mb-3">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
