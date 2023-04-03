@@ -323,6 +323,7 @@
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" required>
+            <span id="username-message"></span>
           </div>
           <div class="mb-3">
             <label for="firstname" class="form-label">First Name</label>
@@ -344,11 +345,35 @@
             <label for="retypepassword" class="form-label">Retype Password</label>
             <input type="password" class="form-control" id="retypepassword" required>
           </div>
-          <button type="submit" class="btn btn-primary mb-3">Sign Up</button>
+          <button type="submit" class="btn btn-primary mb-3" id="signup-button" disabled>Sign Up</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
+<script>
+  const usernameInput = document.getElementById('username');
+usernameInput.addEventListener('input', checkUsernameAvailability);
+
+function checkUsernameAvailability() {
+  const username = this.value;
+
+  // Check if the username is already taken
+  let isTaken = false;
+  if (username.toLowerCase() === 'admin' || username.toLowerCase() === 'employee') {
+    isTaken = true;
+  }
+
+  const message = isTaken ? '** Username is already taken' : '** Username is available';
+  const messageElement = document.getElementById('username-message');
+  messageElement.innerHTML = message;
+
+  const signUpButton = document.getElementById('signup-button');
+  signUpButton.disabled = isTaken;
+}
+
+</script>
 
 {% endblock %}
