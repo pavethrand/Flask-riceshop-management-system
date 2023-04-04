@@ -36,5 +36,9 @@ def loginemp():
         return render_template('employee/dashboard.html',username = user)
     return render_template('employee/login.html',error=True)
 
+@app.route('/signup/',methods=['POST','GET'])
+def cussignup():
+    return render_template('customer/signup.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)

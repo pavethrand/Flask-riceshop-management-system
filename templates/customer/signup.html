@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer SignUp - Senthur Traders {% endblock %}
+
+{% block head %}
+<style>
+    .col-md-6{
+        background-color: #acc4aa;
+        border-radius: 25px;
+    }
+</style>
+
+{% endblock %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 mt-5">
+        <h2 class="text-center mb-3">Customer Signup Form</h2>
+        <form id="signup-form" method="post" novalidate>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username" minlength="8" maxlength="15" pattern="[a-z]{8,15}" required>
+            <label for="username">Username (8-15 characters, lowercase only)</label>
+            <div class="invalid-feedback">Please enter a valid username (8-15 characters, lowercase only).</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" minlength="5" maxlength="40" required>
+            <label for="fullname">Full Name (5-40 characters)</label>
+            <div class="invalid-feedback">Please enter your full name (5-40 characters).</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" maxlength="20" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$" required>
+            <label for="password">Password (8-20 characters, at least one special character and one number)</label>
+            <div class="invalid-feedback">Please enter a valid password (8-20 characters, at least one special character and one number).</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" minlength="8" maxlength="20" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$" required>
+            <label for="confirm_password">Confirm Password</label>
+            <div class="invalid-feedback">Passwords do not match.</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" minlength="10" maxlength="10" pattern="[0-9]{10}" required>
+            <label for="mobile">Mobile Number (10 digits)</label>
+            <div class="invalid-feedback">Please enter a valid mobile number (10 digits).</div>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea class="form-control" id="address" name="address" placeholder="Address" maxlength="50" rows="3"></textarea>
+            <label for="address">Address (up to 50 characters)</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}
