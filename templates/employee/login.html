@@ -20,13 +20,13 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-center mb-3">Employee Login</h5>
-            <form action="/logincus" method="POST">
+            <form action="/loginemp" method="POST">
               <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Username">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username" required>
                 <label for="floatingInput">Username</label>
               </div>
               <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
                 <label for="floatingPassword">Password</label>
               </div>
               <div class="d-flex justify-content-between mb-3">
@@ -40,10 +40,14 @@
               </div>
               <button type="submit" class="btn btn-primary d-block w-100">Login</button>
             </form>
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                  Username or password is incorrect.
+                </div>
+              {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
-  
 {% endblock %}

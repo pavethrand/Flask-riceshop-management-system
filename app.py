@@ -25,8 +25,16 @@ def logincus():
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
     if request.method == 'GET':
-        return render_template('employee/login.html')
-    return render_template('employee/dashboard.html')
+        return render_template('employee/login.html',error=False)
+
+    user = request.form['username']
+    password = request.form['password']
+    if user == 'admin' and password == 'admin':
+        return render_template('admin/dashboard.html')
+    res = db.check_login('employee',user,password)
+    if res == True:
+        return render_template('employee/dashboard.html',username = user)
+    return render_template('employee/login.html',error=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)
