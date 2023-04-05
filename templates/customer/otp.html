@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Customer OTP - Senthur Traders {% endblock %}
+
+{% block head %}
+
+{% endblock %}
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h4 class="text-center mb-4">OTP sent to +91 98765 56789</h4>
+        <h2 class="text-center mb-4">Enter the four digit OTP</h2>
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <form class="row g-3">
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="otp1" placeholder="0" maxlength="1" required>
+              </div>
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="otp2" placeholder="0" maxlength="1" required>
+              </div>
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="otp3" placeholder="0" maxlength="1" required>
+              </div>
+              <div class="col-md-3">
+                <input type="text" class="form-control" id="otp4" placeholder="0" maxlength="1" required>
+              </div>
+              <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary w-100">Verify</button>
+              </div>
+              <div class="col-12 text-center mt-3">
+                <a href="#">Resend OTP</a> | <a href="#">Change Mobile Number</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+{% endblock %}

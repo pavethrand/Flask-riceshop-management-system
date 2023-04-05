@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,url_for
+from flask import Flask,render_template,request,url_for,redirect
 from db import RiceDatabase
 
 app = Flask(__name__)
@@ -39,6 +39,10 @@ def loginemp():
 @app.route('/signup/',methods=['POST','GET'])
 def cussignup():
     return render_template('customer/signup.html')
+
+@app.route('/otp/',methods=['GET','POST'])
+def verityotp():
+    return render_template('customer/otp.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)
