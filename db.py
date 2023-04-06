@@ -31,3 +31,10 @@ class RiceDatabase:
         result = self.cursor.fetchall()
         self.close()
         return bool(result)
+    
+    def view_employees(self):
+        self.connect()
+        self.cursor.execute("SELECT * FROM employee")
+        employees = self.cursor.fetchall()
+        self.close()
+        return employees

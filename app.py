@@ -44,5 +44,10 @@ def cussignup():
 def verityotp():
     return render_template('customer/otp.html')
 
+@app.route('/editemployee/',methods=['POST','GET'])
+def editemp():
+    employees = db.view_employees()
+    return render_template('admin/editemployee.html',employees=employees)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)

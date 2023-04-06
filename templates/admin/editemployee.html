@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %} Add/Edit Employee - Senthur Traders{% endblock %}
+{% block head %}
+<style>
+    #page-info{
+        color: rgb(153, 14, 14);
+    }
+    .user-space{
+    height: 90px;
+    width: 100%;
+
+}
+nav{
+    margin-bottom: 10px;
+    background-color: beige;
+}
+</style>
+
+{% endblock %}
+{% block body %}
+    
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand">Admin Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" id="page-info">
+              <span class="bi bi-person-plus"></span> Add/Edit Employee
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="bi bi-person-plus"></span> Add/Edit Customer
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="bi bi-people"></span> Verify Customer
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="bi bi-plus"></span> Add/Edit Product
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="bi bi-cart-plus"></span> Make Purchase
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="bi bi-cash-coin"></span> Verify Billing &amp; Payment
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+                <span data-feather="user-plus"></span>
+                Verify Billing and Payment
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="user-plus"></span>
+                Add Sales(Customer)
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="user-space"></div>
+      </main>
+
+      <div class="container">
+        <h1>Add/Edit Employee Details</h1>
+        <hr>
+  
+        <div class="row">
+          <!-- Employee Form -->
+          <div class="col-md-6">
+            <h2>Employee Form</h2>
+            <form method="POST">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username (8-15 characters)</label>
+                <input type="text" class="form-control" id="username" name="username" minlength="8" maxlength="15" required>
+              </div>
+              <div class="mb-3">
+                <label for="fullname" class="form-label">Full Name (up to 40 characters)</label>
+                <input type="text" class="form-control" id="fullname" name="fullname" maxlength="40" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password (8-20 characters)</label>
+                <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="20" required>
+              </div>
+              <div class="mb-3">
+                <label for="mobile" class="form-label">Mobile (10 numbers)</label>
+                <input type="tel" class="form-control" id="mobile" name="mobile" minlength="10" maxlength="10" pattern="[0-9]{10}" required>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label">Address (up to 50 characters)</label>
+                <textarea class="form-control" id="address" name="address" maxlength="50" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="reset" class="btn btn-secondary">Clear</button>
+            </form>
+          </div>
+  
+          <!-- Employee List -->
+          <div class="col-md-6">
+            <h2>Employee List</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Full Name</th>
+                  <th>Mobile</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for employee in employees %}
+                <tr>
+                  <td>{{ employee[1]}}</td>
+                  <td>{{ employee[2] }}</td>
+                  <td>{{ employee[3] }}</td>
+                  <td>
+                    <a href="/edit/{{ employee[1] }}">edit</a>
+                    <a href="/delete/{{ employee[2] }}">delete</i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Bootstrap 5 JS (Required for Bootstrap Features) -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+      
+    </div>
+  </div>
+
+{% endblock %}
