@@ -49,5 +49,15 @@ def editemp():
     employees = db.view_employees()
     return render_template('admin/editemployee.html',employees=employees)
 
+@app.route('/editcustomer/',methods=['POST','GET'])
+def editcus():
+    customers = db.view_customers()
+    return render_template('admin/editcustomer.html',customers=customers)
+
+@app.route('/verifycustomer/',methods=['POST','GET'])
+def vercus():
+    vcustomers = db.unverify_customers_list()
+    return render_template('admin/verifycus.html',customers=vcustomers)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000,debug=True)

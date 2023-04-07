@@ -38,3 +38,17 @@ class RiceDatabase:
         employees = self.cursor.fetchall()
         self.close()
         return employees
+    
+    def view_customers(self):
+        self.connect()
+        self.cursor.execute("SELECT * FROM customer")
+        customer = self.cursor.fetchall()
+        self.close()
+        return customer
+    
+    def unverify_customers_list(self):
+        self.connect()
+        self.cursor.execute("SELECT * FROM customer where verified = 0")
+        customer = self.cursor.fetchall()
+        self.close()
+        return customer
