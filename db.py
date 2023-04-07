@@ -1,7 +1,6 @@
 import mysql.connector
 
-db = mysql.connector.connect(
-    )
+db = mysql.connector.connect()
 
 class RiceDatabase:
     def __init__(self):
