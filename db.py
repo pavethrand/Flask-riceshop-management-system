@@ -52,3 +52,18 @@ class RiceDatabase:
         customer = self.cursor.fetchall()
         self.close()
         return customer
+    
+    def view_products(self):
+        self.connect()
+        self.cursor.execute("SELECT * FROM product_details")
+        product = self.cursor.fetchall()
+        self.close()
+        return product
+    
+    def view_suppliers(self):
+        self.connect()
+        self.cursor.execute("SELECT * FROM supplier")
+        supplier = self.cursor.fetchall()
+        self.close()
+        return supplier
+    
