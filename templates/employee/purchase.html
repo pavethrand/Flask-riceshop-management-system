@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %} Make Purchase - Senthur Traders{% endblock %}
+{% block head %}
+{% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Make Purchase</h1>
+    <form method="POST">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="product" class="form-label">Product Name</label>
+            <select class="form-select" id="product" name="product">
+              {% for product in products %}
+              <option value="{{ product[1] }}">{{ product[1] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="supplier" class="form-label">Supplier</label>
+            <select class="form-select" id="supplier" name="supplier">
+              {% for supplier in suppliers %}
+              <option value="{{ supplier[1] }}">{{ supplier[1] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="loadDetails()">Next</button>
+        </div>
+        <div class="col-md-6" id="details" style="display: none;">
+          <div class="mb-3">
+            <label for="bag" class="form-label">Bag (kg)</label>
+            <select class="form-select" id="bag" name="bag">
+              {% for product in products %}
+              <option value="{{ product[3] }}">{{ product[3] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity">
+          </div>
+          <button type="submit" class="btn btn-primary">Make Purchase</button>
+        </div>
+      </div>
+    </form>
+    <div id="purchase-info" style="display: none;">
+      <h3>Purchase Done</h3>
+      <p>Amount: Rs. <span id="amount"></span></p>
+    </div>
+  </div>
+  
+  <script>
+  function loadDetails() {
+    // Show the details section
+    document.getElementById("details").style.display = "block";
+  }
+  
+  // Handle form submission
+  document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    var product = document.getElementById("product").value;
+    var supplier = document.getElementById("supplier").value;
+    var bag = document.getElementById("bag").value;
+    var quantity = document.getElementById("quantity").value;
+    var rate = quantity * 100;
+    // Display the purchase info
+    document.getElementById("amount").innerText = rate;
+    document.getElementById("purchase-info").style.display = "block";
+    // You can also submit the form to a Flask route using AJAX if you prefer
+  });
+  </script>
+{% endblock %}

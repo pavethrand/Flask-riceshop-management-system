@@ -69,5 +69,12 @@ def addsupplier():
     suppliers = db.view_suppliers()
     return render_template('employee/addsupplier.html',suppliers = suppliers)
 
+@app.route('/purchase/')
+def purchase():
+    suppliers=db.view_suppliers()
+    products = db.view_products()
+    return render_template('employee/purchase.html',suppliers = suppliers,products=products)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)
