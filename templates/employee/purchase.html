@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container mt-5">
     <h1 class="mb-4">Make Purchase</h1>
-    <form method="POST">
+    <form method="POST" name="initial">
       <div class="row">
         <div class="col-md-6">
           <div class="mb-3">
@@ -24,9 +24,11 @@
               {% endfor %}
             </select>
           </div>
-          <button type="button" class="btn btn-primary" onclick="loadDetails()">Next</button>
+          <button type="button" class="btn btn-primary" >Next</button>
+        </form>
         </div>
-        <div class="col-md-6" id="details" style="display: none;">
+        <form method="POST" name="second">
+        <div class="col-md-6" id="details">
           <div class="mb-3">
             <label for="bag" class="form-label">Bag (kg)</label>
             <select class="form-select" id="bag" name="bag">
