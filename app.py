@@ -69,11 +69,23 @@ def addsupplier():
     suppliers = db.view_suppliers()
     return render_template('employee/addsupplier.html',suppliers = suppliers)
 
-@app.route('/purchase/')
+@app.route('/purchase/',methods=['POST','GET'])
 def purchase():
     suppliers=db.view_suppliers()
     products = db.view_products()
-    return render_template('employee/purchase.html',suppliers = suppliers,products=products)
+    return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=1)
+
+@app.route('/purchase/2',methods=['POST','GET'])
+def purchase2():
+    suppliers=db.view_suppliers()
+    products = db.view_products()
+    return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=2)
+
+@app.route('/purchase/3',methods=['POST','GET'])
+def purchase3():
+    suppliers=db.view_suppliers()
+    products = db.view_products()
+    return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=3)
 
 
 if __name__ == '__main__':
