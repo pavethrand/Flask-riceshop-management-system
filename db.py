@@ -66,3 +66,10 @@ class RiceDatabase:
         self.close()
         return supplier
     
+    def view_billing(self):
+        self.connect()
+        self.cursor.execute("SELECT * FROM order_details")
+        order = self.cursor.fetchall()
+        self.close()
+        return order
+    

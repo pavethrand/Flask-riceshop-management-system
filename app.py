@@ -57,7 +57,7 @@ def editcus():
 @app.route('/verifycustomer/',methods=['POST','GET'])
 def vercus():
     vcustomers = db.unverify_customers_list()
-    return render_template('admin/verifycus.html',customers=vcustomers)
+    return render_template('employee/verifycus.html',customers=vcustomers)
 
 @app.route('/addproduct/')
 def addproduct():
@@ -86,6 +86,11 @@ def purchase3():
     suppliers=db.view_suppliers()
     products = db.view_products()
     return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=3)
+
+@app.route('/billing/')
+def billing():
+    billing = db.view_billing()
+    return render_template('employee/billing.html',orders=billing)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Billing - Senthur Traders {% endblock %}
+{% block head %}
+{% endblock %}
+{% block body %}
+<div class="container my-5">
+    <h1 class="mb-4">Order Details</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Username</th>
+          <th>Product ID</th>
+          <th>Bag (kg)</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>{{ order[0] }}</td>
+          <td>{{ order[1] }}</td>
+          <td>{{ order[2] }}</td>
+          <td>{{ order[3] }}</td>
+          <td>{{ order[4] }}</td>
+          <td>{{ order[5] }}</td>
+          <td>{{ order[6] }}</td>
+          <td>{{ order[7] }}</td>
+          <td><a href="#">generate bill</a> <a href="#">cancel order</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
