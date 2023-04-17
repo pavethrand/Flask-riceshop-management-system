@@ -92,6 +92,19 @@ def billing():
     billing = db.view_billing()
     return render_template('employee/billing.html',orders=billing)
 
+@app.route('/salesemp/')
+def salebyemployee():
+    products= db.view_products()
+    customers= db.view_customers()
+    return render_template('employee/sales_customer.html',products=products,customers=customers)
+
+@app.route('/salesemp2/',methods=['GET','POST'])
+def salebyemployee2():
+    products= db.view_products()
+    customers= db.view_customers()
+    return render_template('employee/sales_customer2.html',products=products,customers=customers)
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)
