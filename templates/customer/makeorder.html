@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %} Make Sales - Senthur Traders{% endblock %}
+{% block head %}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h1>Mak an Order</h1>
+    <form action="/ordercus2/" method="post">
+      <div class="form-group">
+        <label for="product-name">Product Name</label>
+        <select class="form-control" id="product-name" name="product-name">
+          {% for product in products %}
+          <option value="{{ product }}">{{ product[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+  </div>
+
+{% endblock %}

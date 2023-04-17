@@ -10,6 +10,37 @@
 
 {% endblock %}
 {% block body %}
-<h1 align="center">hello {{username}}!!!!</h1>
+<div class="container">
+    <h1>Welcome, {{ username }}!</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Make an Order</h5>
+            <p class="card-text">Place a new order for products.</p>
+            <a href="/ordercus/" class="btn btn-primary">Make an Order</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Order Cancellation</h5>
+            <p class="card-text">Cancel an existing order.</p>
+            <a href="/ordercancel/" class="btn btn-danger">Cancel Order</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Order History</h5>
+            <p class="card-text">View your order history.</p>
+            <a href="/order/history" class="btn btn-secondary">View History</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>>
   
 {% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Order history - Senthur Traders {% endblock %}
+{% block head %} {% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    <h1>Order History</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Rice Name</th>
+          <th scope="col">Date of Purchase</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.rice_name }}</td>
+            <td>{{ order.date_of_purchase }}</td>
+            <td>{{order.status}}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}

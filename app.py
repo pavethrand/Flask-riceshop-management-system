@@ -104,6 +104,21 @@ def salebyemployee2():
     customers= db.view_customers()
     return render_template('employee/sales_customer2.html',products=products,customers=customers)
 
+@app.route('/ordercus/',methods=['GET','POST'])
+def ordercus():
+    products= db.view_products()
+    return render_template('customer/makeorder.html',products=products)
+
+@app.route('/ordercus2/',methods=['GET','POST'])
+def ordercus2():
+    products= db.view_products()
+    return render_template('customer/makeorder2.html',products=products)
+
+@app.route('/ordercancel/',methods=['GET','POST'])
+def ordercancel():
+    products= db.view_products()
+    return render_template('customer/order_cancel.html',products=products)
+
 
 
 if __name__ == '__main__':
