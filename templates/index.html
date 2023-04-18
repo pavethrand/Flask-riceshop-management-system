@@ -38,18 +38,25 @@
     background-color: #cdecc7;
     background-size: cover;
   }
+  .custom-font {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
   .modal-content {
     background-color: #afe2b1;
   }
   .btn-secondary:hover {
-    background-color: #d48235;
+    background-color: #83df46;
   }
 </style>
 {% endblock %}
 
 {% block body %}
 <!--header-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-light fixed-top">
     <div class="container-fluid">
       <img src="{{url_for('static',filename='logo.png')}}" alt="Senthur Traders" class="logo-image">
         <span class="logo-name">Senthur Traders</span>
@@ -59,19 +66,19 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active custom-font" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#products">Products</a>
+            <a class="nav-link custom-font" href="#products">Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#location">Location</a>
+            <a class="nav-link custom-font" href="#location">Location</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#contact">Contact</a>
+            <a class="nav-link custom-font" href="#contact">Contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#myModal">Login/SignUp</a>
+            <a class="nav-link custom-font" href="#" data-bs-toggle="modal" data-bs-target="#myModal">Login/SignUp</a>
           </li>
         </ul>
       </div>
@@ -210,6 +217,13 @@
             <div class="card h-100">
               <div class="card-body">
                 <h5 class="card-title">Anamalai Kurunai</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">Login to see more....</h5>
               </div>
             </div>
           </div>

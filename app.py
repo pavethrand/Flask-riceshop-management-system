@@ -1,15 +1,22 @@
+#import required libraries
 from flask import Flask,render_template,request,url_for,redirect
+
+#import database file
 from db import RiceDatabase
 
+#create app
 app = Flask(__name__)
 
+#create db connection
 db = RiceDatabase()
 db.connect()
 
+#index page
 @app.route('/')
 def home():
     return render_template('index.html')
 
+#customer login
 @app.route('/logincus/',methods=['POST','GET'])
 def logincus():
     if request.method == 'GET':
@@ -22,6 +29,7 @@ def logincus():
         return render_template('customer/dashboard.html',username = user)
     return render_template('customer/login.html',error=True)
 
+#employee login
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
     if request.method == 'GET':
@@ -36,14 +44,18 @@ def loginemp():
         return render_template('employee/dashboard.html',username = user)
     return render_template('employee/login.html',error=True)
 
+#customersignup
 @app.route('/signup/',methods=['POST','GET'])
 def cussignup():
     return render_template('customer/signup.html')
 
+
+#otp verification customer
 @app.route('/otp/',methods=['GET','POST'])
 def verityotp():
     return render_template('customer/otp.html')
 
+#admin -> edit employee
 @app.route('/editemployee/',methods=['POST','GET'])
 def editemp():
     employees = db.view_employees()
