@@ -102,4 +102,17 @@ class RiceDatabase:
         updated = self.cursor.rowcount
         self.close()
         return updated
+    
+    def verify_cus(self,username):
+        self.connect()
+        tablename='customer'
+        query = "SELECT mobile FROM {} WHERE username = %s AND verified = 0".format(tablename)
+        values = (username,)
+        self.cursor.execute(query, values)
+        result = self.cursor.fetchone()
+        self.close()
+        if result:
+            mobile = result[0]
+            return True, mobile
+        return False, None
 

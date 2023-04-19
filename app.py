@@ -4,6 +4,8 @@ import re
 
 #import database file
 from db import RiceDatabase
+
+#import OTP class
 from otp import OTPGenerator
 
 #create app
@@ -13,6 +15,7 @@ app = Flask(__name__)
 db = RiceDatabase()
 db.connect()
 
+#initialize the class and otp veriable
 otp = OTPGenerator()
 generated_otp=None
 
@@ -26,11 +29,13 @@ def home():
 def logincus():
     if request.method == 'GET':
         return render_template('customer/login.html',error=False)
-
     user = request.form['username']
     password = request.form['password']
     res = db.check_login('customer',user,password)
     if res == True:
+        res_unverified,mobile=db.verify_cus(user)
+        if res_unverified:
+            return redirect(url_for('verifyotp',number=mobile,user=user))
         return render_template('customer/dashboard.html',username = user)
     return render_template('customer/login.html',error=True)
 
@@ -83,6 +88,7 @@ def cussignup():
     print(values_upload)
     return render_template('customer/signup.html',message='Error in Signup.....',list=list)
 
+#customer->OTP Validation
 @app.route('/otp/<string:number>/<string:user>',methods=['GET','POST'])
 def verifyotp(number,user):
     global generated_otp
@@ -101,8 +107,11 @@ def verifyotp(number,user):
         return render_template('/customer/otp_verified.html', value="db_error")
     return render_template('/customer/otp_verified.html', value="otp_error")
 
-#continue here......
-    
+#customer->make order
+@app.route('/makeorderbycustomer')
+def makeorderbycustomer():
+    return render_template('index.html')
+#start here.........
 
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
@@ -177,23 +186,6 @@ def salebyemployee2():
     products= db.view_products()
     customers= db.view_customers()
     return render_template('employee/sales_customer2.html',products=products,customers=customers)
-
-@app.route('/ordercus/',methods=['GET','POST'])
-def ordercus():
-    products= db.view_products()
-    return render_template('customer/makeorder.html',products=products)
-
-@app.route('/ordercus2/',methods=['GET','POST'])
-def ordercus2():
-    products= db.view_products()
-    return render_template('customer/makeorder2.html',products=products)
-
-@app.route('/ordercancel/',methods=['GET','POST'])
-def ordercancel():
-    products= db.view_products()
-    return render_template('customer/order_cancel.html',products=products)
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)

@@ -1,9 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %} OTP - Senthur Traders {% endblock %}
-
-{% block head %}
-
+{% block title %}Customer Dashboard - Senthur Traders {% endblock %}
+{% block head %} 
 {% endblock %}
 {% block body %}
+<body>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh">
+        <div class="card text-center">
+           {% if value == 'success' %}
+            <div class="card-body">
+                <h5 class="card-title">Your Account Verified Successfully...</h5>
+                <button id="login" class="btn btn-primary">Click Here To Login</button>
+            </div>
+            {% endif %}
+
+            {% if value =='db_error' %}
+            <div class="card-body">
+                <h5 class="card-title">Error Occured in Database..Contact support team to verify your account</h5>
+            </div>
+            {% endif %}
+            {% if value =='otp_error' %}
+            <div class="card-body">
+                <h5 class="card-title">You have Entered the Wrong OTP...Once again complete OTP verification by Login... Or contact Shop for Verification</h5>
+                <button id="login" class="btn btn-danger">Login</button>
+            </div>
+            {% endif %}
+        </div>
+      </div>
+      <script>
+        document.getElementById('login').addEventListener('click', function() {
+            window.location.href = '/logincus';
+        });
+    </script>
 {% endblock %}
