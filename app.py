@@ -94,6 +94,7 @@ def verifyotp(number,user):
     user_otp = user_otp + request.form['otp3']
     user_otp = user_otp + request.form['otp4']
     if user_otp == generated_otp:
+        generated_otp = None
         updated = db.verify_otp(user)
         if updated > 0:
             return render_template('/customer/otp_verified.html', value="success")
