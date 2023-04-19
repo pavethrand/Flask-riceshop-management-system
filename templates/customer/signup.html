@@ -9,7 +9,30 @@
         border-radius: 25px;
     }
 </style>
+<script>
+  document
+  .getElementById("form")
+  .addEventListener("submit",(e)=>handlesubmit(e));
+  function handlesubmit(e){
+    e.preventDefault();
+    console.log("hii");
+    const username = document.getElementById('username').value;
+  const fullname = document.getElementById('fullname').value;
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirm_password').value;
+  const mobile = document.getElementById('mobile').value;
+  const address = document.getElementById('address').value;
+  const arr = [username,fullname,password,confirmPassword,mobile,address]
+  for(let i = 0;i<arr.length;i++)
+  {
+    if(arr[i]=='')
+    {
+      alert('empty field');
+    }
+  }
+  }
 
+</script>
 {% endblock %}
 {% block body %}
 
@@ -17,7 +40,7 @@
     <div class="row">
       <div class="col-md-6 offset-md-3 mt-5">
         <h2 class="text-center mb-3">Customer Signup Form</h2>
-        <form id="signup-form" action="/signup/" method="post" novalidate>
+        <form id="form" action="/signup/" method="post" >
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="username" name="username" placeholder="Username" minlength="8" maxlength="15" pattern="[a-z]{8,15}" required>
             <label for="username">Username (8-15 characters, lowercase only)</label>
