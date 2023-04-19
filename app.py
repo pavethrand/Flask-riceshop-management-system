@@ -29,7 +29,28 @@ def logincus():
         return render_template('customer/dashboard.html',username = user)
     return render_template('customer/login.html',error=True)
 
-#employee login
+#customer->signup page
+@app.route('/signup/',methods=['POST','GET'])
+def cussignup():
+    if request.method == 'GET':
+        return render_template('customer/signup.html',message='')
+    
+    username = request.form['username']
+    fullname = request.form['fullname']
+    password = request.form['password']
+    confirm_password = request.form['confirm_password']
+    mobile = request.form['mobile']
+    address = request.form['address']
+    if db.check_customer_username(username):
+        return render_template('customer/signup.html',message='username already exists')
+    elif len(username) < 8: 
+        return render_template('customer/signup.html',message='username should be greater than or equal to 8 characters')
+    elif len(username) > 15: 
+        return render_template('customer/signup.html',message='username should be less than or equal to 15 characters')
+    
+    
+    return username
+
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
     if request.method == 'GET':
@@ -44,18 +65,10 @@ def loginemp():
         return render_template('employee/dashboard.html',username = user)
     return render_template('employee/login.html',error=True)
 
-#customersignup
-@app.route('/signup/',methods=['POST','GET'])
-def cussignup():
-    return render_template('customer/signup.html')
-
-
-#otp verification customer
 @app.route('/otp/',methods=['GET','POST'])
 def verityotp():
     return render_template('customer/otp.html')
 
-#admin -> edit employee
 @app.route('/editemployee/',methods=['POST','GET'])
 def editemp():
     employees = db.view_employees()

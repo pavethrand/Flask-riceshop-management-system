@@ -73,3 +73,11 @@ class RiceDatabase:
         self.close()
         return order
     
+    def check_customer_username(self,username):
+        self.connect()
+        query = "SELECT * FROM customer WHERE username = '%s'"
+        self.cursor.execute(query % username)
+        result = self.cursor.fetchall()
+        self.close()
+        return bool(result)
+    
