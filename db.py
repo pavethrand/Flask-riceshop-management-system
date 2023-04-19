@@ -1,4 +1,5 @@
 import mysql.connector
+import datetime
 
 db = mysql.connector.connect()
 
@@ -83,6 +84,22 @@ class RiceDatabase:
     
     def customer_signup(self,username,fullname,password,mobile,address,verify):
         self.connect()
-
+        dor = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        values = (username, fullname, password, mobile, address, dor, verify)
+        sql = 'INSERT INTO customer (username, fullname, password, mobile, address, dor, verified) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
         self.close()
+        return inserted
     
+    def verify_otp(self, username):
+        self.connect()
+        sql = 'UPDATE customer SET verified = 1 WHERE username = %s'
+        values = (username,)
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        updated = self.cursor.rowcount
+        self.close()
+        return updated
+

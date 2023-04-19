@@ -4,6 +4,7 @@ import re
 
 #import database file
 from db import RiceDatabase
+from otp import OTPGenerator
 
 #create app
 app = Flask(__name__)
@@ -11,6 +12,9 @@ app = Flask(__name__)
 #create db connection
 db = RiceDatabase()
 db.connect()
+
+otp = OTPGenerator()
+generated_otp=None
 
 #index page
 @app.route('/')
@@ -73,14 +77,31 @@ def cussignup():
     elif bool(re.match('^[0-9]{10}$',mobile)) == False:
         list[4]=''
         return render_template('customer/signup.html',message='Enter Correct Mobile Number',list=list)
-    values_upload = db.customer_signup(username,fullname,password,mobile,address,0)
-    if values_upload:
+    values_upload = db.customer_signup(username,fullname,password,mobile,address,verify=0)
+    if values_upload > 0:
         return redirect(url_for('verifyotp',number=str(mobile),user=username))
+    print(values_upload)
     return render_template('customer/signup.html',message='Error in Signup.....',list=list)
 
-@app.route('/otp/<string:number>/<string:name>',methods=['GET','POST'])
-def verityotp(number,name):
-    return render_template('customer/otp.html')
+@app.route('/otp/<string:number>/<string:user>',methods=['GET','POST'])
+def verifyotp(number,user):
+    global generated_otp
+    if request.method == 'GET':
+        generated_otp=otp.generate_otp()
+        return render_template('customer/otp.html',number=number,user=user)
+    user_otp = request.form['otp1']
+    user_otp = user_otp + request.form['otp2']
+    user_otp = user_otp + request.form['otp3']
+    user_otp = user_otp + request.form['otp4']
+    if user_otp == generated_otp:
+        updated = db.verify_otp(user)
+        if updated > 0:
+            return render_template('/customer/otp_verified.html', value="success")
+        return render_template('/customer/otp_verified.html', value="db_error")
+    return render_template('/customer/otp_verified.html', value="otp_error")
+
+#continue here......
+    
 
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
