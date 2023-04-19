@@ -1,5 +1,6 @@
 #import required libraries
 from flask import Flask,render_template,request,url_for,redirect
+import re
 
 #import database file
 from db import RiceDatabase
@@ -32,24 +33,54 @@ def logincus():
 #customer->signup page
 @app.route('/signup/',methods=['POST','GET'])
 def cussignup():
+    list = []
     if request.method == 'GET':
-        return render_template('customer/signup.html',message='')
-    
+        return render_template('customer/signup.html',message='',list=list)
     username = request.form['username']
     fullname = request.form['fullname']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
     mobile = request.form['mobile']
     address = request.form['address']
+    list = [username,fullname,password,confirm_password,mobile,address]
     if db.check_customer_username(username):
-        return render_template('customer/signup.html',message='username already exists')
-    elif len(username) < 8: 
-        return render_template('customer/signup.html',message='username should be greater than or equal to 8 characters')
+        list[0]=''
+        return render_template('customer/signup.html',message='username already exists',list=list)
+    elif len(username) < 8:
+        list[0]=''
+        return render_template('customer/signup.html',message='username should be greater than or equal to 8 characters',list=list)
     elif len(username) > 15: 
-        return render_template('customer/signup.html',message='username should be less than or equal to 15 characters')
-    
-    
-    return username
+        list[0]=''
+        return render_template('customer/signup.html',message='username should be less than or equal to 15 characters',list=list)
+    elif len(fullname) < 5:
+        list[1]=''
+        return render_template('customer/signup.html',message='Fullname should be greater than or equal to 5 characters',list=list)
+    elif len(fullname) > 40: 
+        list[1]=''
+        return render_template('customer/signup.html',message='Fullname should be less than or equal to 40 characters',list=list)
+    elif bool(re.match('^[a-zA-Z]+$',fullname)) == False:
+        list[1]=''
+        return render_template('customer/signup.html',message='Fullname should contain Alphabets only',list=list)
+    elif bool(re.match('^[a-z0-9]+$',username)) == False:
+        list[0]=''
+        return render_template('customer/signup.html',message='Username should contain Alphabets and numbers only',list=list)
+    elif bool(re.match('^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$',password)) == False:
+        list[2]=''
+        return render_template('customer/signup.html',message='Password should contain 8-20 characters and atleast one special characters and one number',list=list)
+    elif password != confirm_password:
+        list[3]=''
+        return render_template('customer/signup.html',message='Password and Confirm Password must be same',list=list) 
+    elif bool(re.match('^[0-9]{10}$',mobile)) == False:
+        list[4]=''
+        return render_template('customer/signup.html',message='Enter Correct Mobile Number',list=list)
+    values_upload = db.customer_signup(username,fullname,password,mobile,address,0)
+    if values_upload:
+        return redirect(url_for('verifyotp',number=str(mobile),user=username))
+    return render_template('customer/signup.html',message='Error in Signup.....',list=list)
+
+@app.route('/otp/<string:number>/<string:name>',methods=['GET','POST'])
+def verityotp(number,name):
+    return render_template('customer/otp.html')
 
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
@@ -64,10 +95,6 @@ def loginemp():
     if res == True:
         return render_template('employee/dashboard.html',username = user)
     return render_template('employee/login.html',error=True)
-
-@app.route('/otp/',methods=['GET','POST'])
-def verityotp():
-    return render_template('customer/otp.html')
 
 @app.route('/editemployee/',methods=['POST','GET'])
 def editemp():

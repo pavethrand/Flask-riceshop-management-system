@@ -81,3 +81,8 @@ class RiceDatabase:
         self.close()
         return bool(result)
     
+    def customer_signup(self,username,fullname,password,mobile,address,verify):
+        self.connect()
+
+        self.close()
+    
