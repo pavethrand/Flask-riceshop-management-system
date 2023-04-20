@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}ORDER PAGE - Senthur Traders {% endblock %}
+{% block head %}
+
+{% endblock %}
+{% block body %}
+<form action="/makeorderbycustomer/" method="POST">
+<label for="product">Choose the category for product search:</label>
+<select id="product" name="product">
+  <option value="null">--select--</option>
+  {% for c in category %}
+  <option value={{c[0]}}>{{c[0]}}</option>
+  {% endfor %}
+</select>
+<input type="submit" value="search">
+</form>
+{% if selected != None %}
+hello
+{% endif %}
+
+
+{% endblock %} 

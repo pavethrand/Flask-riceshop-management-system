@@ -108,10 +108,21 @@ def verifyotp(number,user):
     return render_template('/customer/otp_verified.html', value="otp_error")
 
 #customer->make order
-@app.route('/makeorderbycustomer')
+@app.route('/makeorderbycustomer/',methods=['GET','POST'])
 def makeorderbycustomer():
-    return render_template('index.html')
-#start here.........
+    dropdown_values = db.view_products_category()
+    if request.method == 'GET': 
+        return render_template('customer/orderpage.html',category=dropdown_values,selected=None)
+    selected_category = request.form.get('product')
+    if selected_category == 'null':
+        return render_template('customer/orderpage.html',category=dropdown_values,selected=None)
+    selected = db.view_products_selected(selected_category)
+    return render_template('customer/orderpage.html',category=dropdown_values,selected=selected)
+    
+
+
+
+
 
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():

@@ -115,4 +115,20 @@ class RiceDatabase:
             mobile = result[0]
             return True, mobile
         return False, None
+    
+    def view_products_category(self):
+        self.connect()
+        self.cursor.execute("SELECT DISTINCT category FROM product_details")
+        product = self.cursor.fetchall()
+        self.close()
+        return product
+    
+    def view_products_selected(self,category):
+        self.connect()
+        query= "SELECT * FROM product_details where category = %s"
+        values=(category,)
+        self.cursor.execute(query, values)
+        product = self.cursor.fetchall()
+        self.close()
+        return product
 
