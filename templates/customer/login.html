@@ -2,49 +2,91 @@
 
 {% block title %}Customer Login - Senthur Traders {% endblock %}
 {% block head %}
-    <style>
-        body{
-            background-color:#cdecc7;
-        }
-        .card{
-            background-color:#3b064d;
-            color:#cdecc7;
-        }
-    </style>
+<style>
+body{
+background-color:#cdecc7;
+}
+.card{
+background-color:#3b064d;
+color:#cdecc7;
+}
+/* Animations */
+.animate__animated {
+animation-duration: 1s;
+animation-fill-mode: both;
+}
+.animate__fadeInUp {
+animation-name: fadeInUp;
+}
+.animate__fadeInDown {
+animation-name: fadeInDown;
+}
+.animate__fadeIn {
+animation-name: fadeIn;
+}
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(50px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes fadeInDown {
+from {
+opacity: 0;
+transform: translateY(-50px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+</style>
 {% endblock %}
 {% block body %}
 
 <div class="container-fluid h-100 align-items-center">
     <div class="row justify-content-center align-items-center h-100">
-      <div class="col-sm-8 col-md-6 col-lg-4 align-self-center">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title text-center mb-3">Customer Login</h5>
-            <form action="/logincus" method="POST">
-              <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username" required>
-                <label for="floatingInput">Username</label>
-              </div>
-              <div class="form-floating mb-3">
-                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-                <label for="floatingPassword">Password</label>
-              </div>
-              <!-- <div class="d-flex justify-content-between mb-3">
-                <a href="#">Forgot Password?</a>
-              </div> -->
-              <button type="submit" class="btn btn-primary d-block w-100">Login</button>
-            </form>
-            <div class="text-center mt-3">
-              Don't have an account? <a href="/signup">Sign up</a>
-            </div>
-            {% if error %}
-                <div class="alert alert-danger" role="alert">
-                  Username or password is incorrect.
+        <div class="col-sm-8 col-md-6 col-lg-4 align-self-center animate__animated animate__fadeInDown">
+            <div class="card animate__animated animate__fadeInUp">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">Customer Login</h5>
+                    <form action="/logincus" method="POST">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="Username" name="username" required>
+                            <label for="floatingInput">Username</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                            <label for="floatingPassword">Password</label>
+                        </div>
+                        <!-- <div class="d-flex justify-content-between mb-3">
+                            <a href="#">Forgot Password?</a>
+                        </div> -->
+                        <button type="submit" class="btn btn-primary d-block w-100">Login</button>
+                    </form>
+                    <div class="text-center mt-3 animate__animated animate__fadeIn">
+                        Don't have an account? <a href="/signup">Sign up</a>
+                    </div>
+                    {% if error %}
+                    <div class="alert alert-danger mt-3 animate__animated animate__fadeIn">
+                        Username or password is incorrect.
+                    </div>
+                    {% endif %}
                 </div>
-              {% endif %}
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 {% endblock %}

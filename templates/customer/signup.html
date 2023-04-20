@@ -1,60 +1,191 @@
 {% extends 'base.html' %}
-
-{% block title %}Customer SignUp - Senthur Traders {% endblock %}
+{% block title %}Customer SignUp - Senthur Traders{% endblock %}
 
 {% block head %}
-<style>
-    .col-md-6{
-        background-color: #acc4aa;
-        border-radius: 25px;
-    }
-</style>
-{% endblock %}
-{% block body %}
-
-<div class="container">
-    <div class="row">
-      <div class="col-md-6 offset-md-3 mt-5">
-        <h2 class="text-center mb-3">Customer Signup Form</h2>
-        <form id="form" action="/signup/" method="post">
-          <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username" minlength="8" maxlength="15" pattern="[a-z]{8,15}" value="{{list[0]}}" required>
-            <label for="username">Username (8-15 characters, lowercase only)</label>
-            <div class="invalid-feedback">Please enter a valid username (8-15 characters, lowercase only).</div>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" minlength="5" maxlength="40" value="{{list[1]}}"  required>
-            <label for="fullname">Full Name (5-40 characters)</label>
-            <div class="invalid-feedback">Please enter your full name (5-40 characters).</div>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" maxlength="20" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$" value="{{list[2]}}" required>
-            <label for="password">Password (8-20 characters, at least one special character and one number)</label>
-            <div class="invalid-feedback">Please enter a valid password (8-20 characters, at least one special character and one number).</div>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" minlength="8" maxlength="20" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$" value="{{list[3]}}" required>
-            <label for="confirm_password">Confirm Password</label>
-            <div class="invalid-feedback">Passwords do not match.</div>
-          </div>
-          <div class="form-floating mb-3">
-            <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" minlength="10" maxlength="10" pattern="[0-9]{10}" value="{{list[4]}}" required>
-            <label for="mobile">Mobile Number (10 digits)</label>
-            <div class="invalid-feedback">Please enter a valid mobile number (10 digits).</div>
-          </div>
-          <div class="form-floating mb-3">
-            <textarea class="form-control" id="address" name="address" placeholder="Address" maxlength="50" rows="3" value="{{list[5]}}" ></textarea>
-            <label for="address">Address (up to 50 characters)</label>
-          </div>
-          <button type="submit" class="btn btn-primary">Sign Up</button>
-          {% if message != '' %}
-            <div class="alert alert-danger" role="alert">
-              {{message}}
-            </div>
-            {% endif %}
-        </form>
-      </div>
-    </div>
-  </div>
-  
-{% endblock %}
+    <style>
+        .col-md-6 {
+            background-color: #acc4aa;
+            border-radius: 25px;
+        }
+        
+        .form-floating label {
+            font-size: 1.2rem;
+            color: #333;
+        }
+        
+        .form-floating input, .form-floating textarea {
+            border-radius: 25px;
+            border: none;
+            padding: 0.5rem;
+            background-color: #fff;
+        }
+        
+        .form-floating input:focus, .form-floating textarea:focus {
+            box-shadow: none;
+            border: 2px solid #2a9d8f;
+        }
+        
+        .form-floating .invalid-feedback {
+            display: none;
+            font-size: 0.8rem;
+            color: #dc3545;
+        }
+        
+        .form-floating input:invalid ~ .invalid-feedback {
+            display: block;
+        }
+        
+        .form-floating input[type="password"] {
+            font-family: "Courier New", Courier, monospace;
+        }
+        
+        .form-floating input[type="tel"]::-webkit-inner-spin-button,
+        .form-floating input[type="tel"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .form-floating input[type="tel"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        
+        .form-floating button[type="submit"] {
+            background-color: #2a9d8f;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1.5rem;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+        
+        .form-floating button[type="submit"]:hover {
+            background-color: #21867a;
+        }
+        
+        .alert {
+            border-radius: 25px;
+        }
+        
+        /* Animation */
+        @keyframes slide-up {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        .form-floating input,
+        .form-floating textarea,
+        .form-floating button[type="submit"] {
+            animation-name: slide-up;
+            animation-duration: 0.5s;
+            animation-fill-mode: both;
+        }
+        .alert {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  .alert-show {
+    opacity: 1;
+  }
+        
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            10% {
+                transform: translateX(-10px);
+            }
+            20% {
+                transform: translateX(10px);
+            }
+            30% {
+                transform: translateX(-10px);
+            }
+            40% {
+                transform: translateX(10px);
+            }
+            50% {
+                transform: translateX(-10px);
+            }
+            60% {
+                transform: translateX(10px);
+            }
+            70% {
+                transform: translateX(-10px);
+            }
+            80% {
+                transform: translateX(10px);
+            }
+            90% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        
+        .form-floating .invalid-feedback {
+            animation-name: shake;
+            animation-duration: 0.5s;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+            animation-timing-function: linear;
+        }
+    </style>
+    {% endblock %}
+    {% block body %}
+    <div class="container">
+        <div class="row">
+          <div class="col-md-6 offset-md-3 mt-5">
+            <h2 class="text-center mb-3">Customer Signup Form</h2>
+            <form id="form" action="/signup/" method="post">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Username" minlength="8" maxlength="15" pattern="[a-z]{8,15}" value="{{list[0]}}" required>
+                <label for="username">Username (8-15 characters, lowercase only)</label>
+                <div class="invalid-feedback">Please enter a valid username (8-15 characters, lowercase only).</div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full Name" minlength="5" maxlength="40" value="{{list[1]}}"  required>
+                <label for="fullname">Full Name (5-40 characters)</label>
+                <div class="invalid-feedback">Please enter your full name (5-40 characters).</div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" minlength="8" maxlength="20" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$" value="{{list[2]}}" required>
+                <label for="password">Password (8-20 characters, at least one special character and one number)</label>
+                <div class="invalid-feedback">Please enter a valid password (8-20 characters, at least one special character and one number).</div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" minlength="8" maxlength="20" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$" value="{{list[3]}}" required>
+                <label for="confirm_password">Confirm Password</label>
+                <div class="invalid-feedback">Passwords do not match.</div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" minlength="10" maxlength="10" pattern="[0-9]{10}" value="{{list[4]}}" required>
+                <label for="mobile">Mobile Number (10 digits)</label>
+                <div class="invalid-feedback">Please enter a valid mobile number (10 digits).</div>
+              </div>
+              <div class="form-floating mb-3">
+                <textarea class="form-control" id="address" name="address" placeholder="Address" maxlength="50" rows="3" value="{{list[5]}}" ></textarea>
+                <label for="address">Address (up to 50 characters)</label>
+              </div>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+              {% if message != '' %}
+              <div class="alert alert-danger" role="alert" id="alert-message">{{ message }}</div>
+              {% endif %}
+              <div class="empty"></div>
+              <script>
+                $(document).ready(function() {
+                  if ($('#alert-message').length) {
+                    $('#alert-message').addClass('alert-show');
+                    setTimeout(function() {
+                      $('#alert-message').removeClass('alert-show');
+                    }, 5000);
+                  }
+                });
+              </script>
+              {% endblock %}

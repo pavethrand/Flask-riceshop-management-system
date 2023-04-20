@@ -1,23 +1,80 @@
 {% extends 'base.html' %}
 
-{% block title %}ORDER PAGE - Senthur Traders {% endblock %}
+{% block title %}ORDER PAGE - Senthur Traders{% endblock %}
 {% block head %}
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
+  <style>
+    /* CSS for the animation */
+    .animate {
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
 {% endblock %}
 {% block body %}
-<form action="/makeorderbycustomer/" method="POST">
-<label for="product">Choose the category for product search:</label>
-<select id="product" name="product">
-  <option value="null">--select--</option>
-  {% for c in category %}
-  <option value={{c[0]}}>{{c[0]}}</option>
-  {% endfor %}
-</select>
-<input type="submit" value="search">
-</form>
-{% if selected != None %}
-hello
-{% endif %}
+<div class="container my-5">
+  <form action="/makeorderbycustomer/" method="POST">
+    <div class="mb-3">
+      <label for="product" class="form-label">Choose the category for product search:</label>
+      <select id="product" name="product" class="form-select">
+        <option value="null">--select--</option>
+        {% for c in category %}
+        <option value="{{c[0]}}">{{c[0]}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
 
+  {% if selected %}
+  <table class="table table-striped table-hover my-4">
+    <thead>
+      <tr>
+        <th scope="col">Brand</th>
+        <th scope="col">Category</th>
+        <th scope="col">Availability (in bag)</th>
+        <th scope="col">Available Quantity</th>
+        <th scope="col">Rate (per bag)</th>
+        <th scope="col">Make Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for select in selected %}
+      <tr>
+        <td>{{select[1]}}</td>
+        <td>{{select[2]}}</td>
+        <td>{{select[3]}}</td>
+        <td>{{select[4]}}</td>
+        <td>{{select[6]}}</td>
+        <td><button type="button" class="btn btn-success animate" onclick="window.location.href='{{url_for("place_order",prt_id=select[0])}}'">Place Order</button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>
 
-{% endblock %} 
+<script>
+  // JavaScript for the animation
+  const animateButtons = document.querySelectorAll('.animate');
+  animateButtons.forEach(button => {
+    button.addEventListener('mouseover', () => {
+      button.classList.add('animate__animated', 'animate__pulse');
+    });
+    button.addEventListener('animationend', () => {
+      button.classList.remove('animate__animated', 'animate__pulse');
+    });
+  });
+</script>
+{% endblock %}

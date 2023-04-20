@@ -119,8 +119,11 @@ def makeorderbycustomer():
     selected = db.view_products_selected(selected_category)
     return render_template('customer/orderpage.html',category=dropdown_values,selected=selected)
     
-
-
+#customer-> place order
+#need to change after setting session
+@app.route('/placeorder/<int:prt_id>')
+def place_order(prt_id):
+    return "done"
 
 
 
