@@ -91,15 +91,69 @@ class RiceDatabase:
     #customer -> see details of particular category
     def view_products_selected(self,category):
         self.connect()
-        query= "SELECT * FROM product_details where category = %s"
+        query= "SELECT product_id,brand,category,availability,quantity,ros FROM product_details where quantity != 0 and category = %s"
         values=(category,)
         self.cursor.execute(query, values)
         product = self.cursor.fetchall()
         self.close()
         return product
+    
+    #customer -> get particular product by product_id
+    def get_product_details(self,id):
+        self.connect()
+        query= "SELECT product_id,brand,category,availability,quantity,ros FROM product_details where product_id= %s"
+        values=(id,)
+        self.cursor.execute(query, values)
+        product_details = self.cursor.fetchone()
+        self.close()
+        return product_details
+    
+    #customer->order backend work
+    def product_availability(self,id):
+        self.connect()
+        query= "SELECT quantity,ros FROM product_details where product_id= %s"
+        values=(id,)
+        self.cursor.execute(query, values)
+        product_details = self.cursor.fetchone()
+        self.close()
+        return product_details
+    
+    #customer->add order to order table
+    def add_order(self,username,productid,quantity,rate):
+        self.connect()
+        doo = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        status='ORDERED'
+        values = (username, productid, quantity, rate, doo, status)
+        sql = 'INSERT INTO order_details (username, product_id, quantity, roo,doo,status) VALUES (%s, %s, %s, %s, %s, %s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    #customer->reduce order in product table
+    def reduce_product(self, id,quantity):
+        self.connect()
+        sql = 'UPDATE product_details SET quantity = %s WHERE product_id = %s'
+        values = (quantity,id)
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        updated = self.cursor.rowcount
+        self.close()
+        return updated
+    
+    #customer->fetch value for order cancel
+    def product_fetch_for_cancel(self,user):
+        self.connect()
+        query= "SELECT * FROM order_details where status='ORDERED' and username= %s"
+        values=(user,)
+        self.cursor.execute(query, values)
+        product_details = self.cursor.fetchall()
+        self.close()
+        return product_details
+    
 
-
-
+    
 
     def view_employees(self):
         self.connect()

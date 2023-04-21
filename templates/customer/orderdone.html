@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Done - Senthur Traders {% endblock %}
+{% block head %}
+<style>
+    body {
+        background-color: #cdecc7;
+    }
+
+    .card {
+        background-color: #3b064d;
+        color: #cdecc7;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        padding: 20px;
+    }
+
+    .btn-primary {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #3e8e41;
+    }
+
+    .btn-danger {
+        background-color: #f44336;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-danger:hover {
+        background-color: #d32f2f;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<body>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh">
+        <div class="card text-center">
+           {% if value == 'success' %}
+            <div class="card-body">
+                <h5 class="card-title">Your Submitted Successfully....</h5>
+                <button id="login" class="btn btn-primary">Click here go back</button>
+            </div>
+            {% endif %}
+            {% if value =='error' %}
+            <div class="card-body">
+                <h5 class="card-title">Error at Backend.....Please Contact Shop</h5>
+                <button id="login" class="btn btn-danger">Click here go back</button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        const loginButton = document.getElementById('login');
+        loginButton.addEventListener('click', function() {
+            window.location.href = "/cdashboard/";
+        });
+
+        // Animate card on load
+        const card = document.querySelector('.card');
+        card.animate([
+            { transform: 'translateY(-50px)', opacity: 0 },
+            { transform: 'translateY(0)', opacity: 1 }
+        ], {
+            duration: 500,
+            easing: 'ease-in-out',
+            fill: 'forwards'
+        });
+    </script>
+{% endblock %}

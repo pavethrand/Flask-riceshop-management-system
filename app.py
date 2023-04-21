@@ -44,8 +44,15 @@ def logincus():
             return redirect(url_for('verifyotp',number=mobile,user=user))
         #set session to login customer
         session['customer'] = user
-        return render_template('customer/dashboard.html',username = session['customer'])
+        return redirect(url_for('cus_dashboard'))
     return render_template('customer/login.html',error=True)
+
+#customer->dashboard
+@app.route('/cdashboard/',methods=['GET','POST'])
+def cus_dashboard():
+    if 'customer' not in session:
+        return redirect(url_for('logoutall'))
+    return render_template('customer/dashboard.html',username = session['customer'])
 
 #customer->signup page
 @app.route('/signup/',methods=['POST','GET'])
@@ -145,11 +152,43 @@ def makeorderbycustomer():
     selected = db.view_products_selected(selected_category)
     return render_template('customer/orderpage.html',category=dropdown_values,selected=selected)
 
+#customer->orderconfirm page
 @app.route('/placeorder/<int:prt_id>/<string:user>')
 def place_order(prt_id,user):
     if 'customer' not in session or user != session['customer']:
         return redirect(url_for('logoutall'))
-    return render_template('customer/orderpage2.html')
+    product_detail = db.get_product_details(prt_id)
+    return render_template('customer/orderpage2.html',product=product_detail)
+
+#customer -> placing order in backend
+@app.route('/order_done/',methods=['GET','POST'])
+def order_done():
+    if 'customer' not in session:
+        return redirect(url_for('logoutall'))
+    product_id = request.form.get('product_id')
+    total_product = request.form.get('total_product')
+    print(total_product)
+    check_availability = db.product_availability(product_id)
+    if check_availability[0] < int(total_product):
+        return "<html><body><script>alert('Entered value is greater than available quantity')</script></body></html>"
+    order_add=db.add_order(session['customer'],product_id,int(total_product),(float(total_product) * float(check_availability[1])))
+    if order_add:
+        reduce_product = db.reduce_product(product_id,check_availability[0]-int(total_product))
+        if reduce_product:
+            return render_template('customer/orderdone.html',value='success')
+    return render_template('customer/orderdone.html',value='error')
+
+@app.route('/cordercancel/',methods=['GET','POST'])
+def cordercancel():
+    if 'customer' not in session:
+        return redirect(url_for('logoutall'))
+    placed_orders=db.product_fetch_for_cancel(session['customer'])
+    product_details=[]
+    for order in placed_orders:
+        product_details.append(db.get_product_details(order[2]))
+    return render_template('customer/ordercancel.html',orders=placed_orders,products=product_details)
+
+
 
 
 
