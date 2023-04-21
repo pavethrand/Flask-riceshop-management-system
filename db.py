@@ -143,17 +143,21 @@ class RiceDatabase:
         return updated
     
     #customer->fetch value for order cancel
-    def product_fetch_for_cancel(self,user):
+    def product_fetch_for_cancel(self, username):
         self.connect()
-        query= "SELECT * FROM order_details where status='ORDERED' and username= %s"
-        values=(user,)
-        self.cursor.execute(query, values)
-        product_details = self.cursor.fetchall()
+        query = """
+            SELECT o.order_id, o.product_id, o.quantity, p.brand, p.category, p.availability, o.roo, o.doo
+            FROM order_details o
+            INNER JOIN product_details p ON o.product_id = p.product_id
+            WHERE o.username = %s
+        """
+        self.cursor.execute(query, (username,))
+        orders = self.cursor.fetchall()
         self.close()
-        return product_details
+        return orders
     
 
-    
+
 
     def view_employees(self):
         self.connect()

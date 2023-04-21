@@ -183,10 +183,13 @@ def cordercancel():
     if 'customer' not in session:
         return redirect(url_for('logoutall'))
     placed_orders=db.product_fetch_for_cancel(session['customer'])
-    product_details=[]
-    for order in placed_orders:
-        product_details.append(db.get_product_details(order[2]))
-    return render_template('customer/ordercancel.html',orders=placed_orders,products=product_details)
+    return render_template('customer/ordercancel.html',orders=placed_orders)
+
+@app.route('/cordercancel/<int:orderid>/',methods=['GET','POST'])
+def ordercancelling(orderid):
+    if 'customer' not in session:
+        return redirect(url_for('logoutall'))
+    return "done"
 
 
 
