@@ -1,5 +1,5 @@
 #import required libraries
-from flask import Flask,render_template,request,url_for,redirect
+from flask import Flask,render_template,request,url_for,redirect,session
 import re
 
 #import database file
@@ -10,6 +10,7 @@ from otp import OTPGenerator
 
 #create app
 app = Flask(__name__)
+app.secret_key = 'obito_uchiha'
 
 #create db connection
 db = RiceDatabase()
@@ -28,6 +29,11 @@ def home():
 @app.route('/logincus/',methods=['POST','GET'])
 def logincus():
     if request.method == 'GET':
+        #destroy session -> if set
+        if 'customer' in session:
+            session.pop('customer', None)
+        if 'unverified' in session:
+            session.pop('unverified', None)
         return render_template('customer/login.html',error=False)
     user = request.form['username']
     password = request.form['password']
@@ -36,7 +42,9 @@ def logincus():
         res_unverified,mobile=db.verify_cus(user)
         if res_unverified:
             return redirect(url_for('verifyotp',number=mobile,user=user))
-        return render_template('customer/dashboard.html',username = user)
+        #set session to login customer
+        session['customer'] = user
+        return render_template('customer/dashboard.html',username = session['customer'])
     return render_template('customer/login.html',error=True)
 
 #customer->signup page
@@ -84,8 +92,9 @@ def cussignup():
         return render_template('customer/signup.html',message='Enter Correct Mobile Number',list=list)
     values_upload = db.customer_signup(username,fullname,password,mobile,address,verify=0)
     if values_upload > 0:
-        return redirect(url_for('verifyotp',number=str(mobile),user=username))
-    print(values_upload)
+        #set session to signup
+        session['unverified'] = username
+        return redirect(url_for('verifyotp',number=str(mobile),user=session['unverified']))
     return render_template('customer/signup.html',message='Error in Signup.....',list=list)
 
 #customer->OTP Validation
@@ -93,23 +102,40 @@ def cussignup():
 def verifyotp(number,user):
     global generated_otp
     if request.method == 'GET':
-        generated_otp=otp.generate_otp()
-        return render_template('customer/otp.html',number=number,user=user)
-    user_otp = request.form['otp1']
-    user_otp = user_otp + request.form['otp2']
-    user_otp = user_otp + request.form['otp3']
-    user_otp = user_otp + request.form['otp4']
-    if user_otp == generated_otp:
-        generated_otp = None
-        updated = db.verify_otp(user)
-        if updated > 0:
-            return render_template('/customer/otp_verified.html', value="success")
-        return render_template('/customer/otp_verified.html', value="db_error")
-    return render_template('/customer/otp_verified.html', value="otp_error")
+        if session.get('unverified') == user:
+            generated_otp=otp.generate_otp()
+            return render_template('customer/otp.html',number=number,user=user)
+        return redirect(url_for('logincus',error=False))
+    
+    if session.get('unverified') == user:
+        user_otp = request.form['otp1']
+        user_otp = user_otp + request.form['otp2']
+        user_otp = user_otp + request.form['otp3']
+        user_otp = user_otp + request.form['otp4']
+        session.pop('unverified', None)
+        if user_otp == generated_otp:
+            generated_otp = None
+            updated = db.verify_otp(user)
+            if updated > 0:
+                return render_template('/customer/otp_verified.html', value="success")
+            return render_template('/customer/otp_verified.html', value="db_error")
+        return render_template('/customer/otp_verified.html', value="otp_error")
+    return redirect(url_for('logincus',error=False))
+
+#customer -> logout
+#add admin,employee at last
+@app.route('/logout/',methods=['GET','POST'])
+def logoutall():
+    if 'customer' in session:
+        session.pop('customer', None)
+        return redirect(url_for('logincus',error=False))
+    return redirect(url_for('home'))
 
 #customer->make order
 @app.route('/makeorderbycustomer/',methods=['GET','POST'])
 def makeorderbycustomer():
+    if 'customer' not in session:
+        return redirect(url_for('logoutall'))    
     dropdown_values = db.view_products_category()
     if request.method == 'GET': 
         return render_template('customer/orderpage.html',category=dropdown_values,selected=None)
@@ -119,11 +145,10 @@ def makeorderbycustomer():
     selected = db.view_products_selected(selected_category)
     return render_template('customer/orderpage.html',category=dropdown_values,selected=selected)
 
-#dayoff
-#customer-> place order
-#need to change after setting session
-@app.route('/placeorder/<int:prt_id>')
-def place_order(prt_id):
+@app.route('/placeorder/<int:prt_id>/<string:user>')
+def place_order(prt_id,user):
+    if 'customer' not in session or user != session['customer']:
+        return redirect(url_for('logoutall'))
     return render_template('customer/orderpage2.html')
 
 

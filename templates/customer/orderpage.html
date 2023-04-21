@@ -3,6 +3,8 @@
 {% block title %}ORDER PAGE - Senthur Traders{% endblock %}
 {% block head %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <style>
     /* CSS for the animation */
     .animate {
@@ -57,14 +59,13 @@
         <td>{{select[3]}}</td>
         <td>{{select[4]}}</td>
         <td>{{select[6]}}</td>
-         <td><button type="button" class="btn btn-success animate" onclick="window.location.href='{{url_for("place_order",prt_id=select[0])}}'">Place Order</button></td> 
+        <td><button type="button" class="btn btn-success animate" onclick="window.location.href='{{url_for("place_order",prt_id=select[0],user=session["customer"])}}'">Place Order</button></td> 
       </tr>
       {% endfor %}
     </tbody>
   </table>
   {% endif %}
 </div>
-
 <script>
   // JavaScript for the animation
   const animateButtons = document.querySelectorAll('.animate');
