@@ -147,14 +147,61 @@ class RiceDatabase:
         self.connect()
         query = """
             SELECT o.order_id, o.product_id, o.quantity, p.brand, p.category, p.availability, o.roo, o.doo
-            FROM order_details o
+            FROM order_details o 
             INNER JOIN product_details p ON o.product_id = p.product_id
-            WHERE o.username = %s
+            WHERE o.username = %s AND o.status = 'ORDERED';
         """
         self.cursor.execute(query, (username,))
         orders = self.cursor.fetchall()
         self.close()
         return orders
+    
+    #customer-> order cancel to cancel table
+    def add_cancel_order_to_cancel_table(self,orderid,username):
+        self.connect()
+        doc = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        values = (username, orderid,doc)
+        sql = 'INSERT INTO order_cancellation(username, order_id, doc) VALUES (%s, %s, %s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    #customer -> get order_quantity by order id
+    def get_order_quantity_by_id(self,id):
+        self.connect()
+        query= "SELECT quantity FROM order_details where order_id= %s"
+        values=(id,)
+        self.cursor.execute(query, values)
+        quantity = self.cursor.fetchone()
+        self.close()
+        return quantity
+    
+    #customer-> return add the product value to product table
+    def update_product_quantity_on_cancel(self, id, add_quantity):
+        self.connect()
+        self.cursor.execute("UPDATE product_details SET quantity = quantity + %s WHERE product_id IN (SELECT product_id FROM order_details WHERE order_id = %s)", (add_quantity, id))
+        self.conn.commit()
+        self.close()
+        return True
+    
+    def update_order_details_to_cancel(self, id):
+        try:
+            self.connect()
+            status = 'CANCELLED'
+            sql = "UPDATE order_details SET status = %s WHERE order_id = %s"
+            values = (status, id)
+            self.cursor.execute(sql, values)
+            self.conn.commit()
+            updated = self.cursor.rowcount
+            return updated
+        except Exception as e:
+            print("Error while updating order details:", e)
+        finally:
+            self.close()
+
+ 
     
 
 

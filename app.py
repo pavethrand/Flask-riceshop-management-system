@@ -178,6 +178,7 @@ def order_done():
             return render_template('customer/orderdone.html',value='success')
     return render_template('customer/orderdone.html',value='error')
 
+#customer->order_cancel page
 @app.route('/cordercancel/',methods=['GET','POST'])
 def cordercancel():
     if 'customer' not in session:
@@ -185,11 +186,16 @@ def cordercancel():
     placed_orders=db.product_fetch_for_cancel(session['customer'])
     return render_template('customer/ordercancel.html',orders=placed_orders)
 
+#customer-> order cancell process
 @app.route('/cordercancel/<int:orderid>/',methods=['GET','POST'])
 def ordercancelling(orderid):
     if 'customer' not in session:
         return redirect(url_for('logoutall'))
-    return "done"
+    db.add_cancel_order_to_cancel_table(orderid,session['customer'])
+    get_quantity = db.get_order_quantity_by_id(orderid)
+    db.update_product_quantity_on_cancel(orderid,get_quantity[0])
+    update = db.update_order_details_to_cancel(orderid)
+    return redirect('/cordercancel/')
 
 
 
