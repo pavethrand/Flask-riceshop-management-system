@@ -32,8 +32,6 @@ def logincus():
         #destroy session -> if set
         if 'customer' in session:
             session.pop('customer', None)
-        if 'unverified' in session:
-            session.pop('unverified', None)
         return render_template('customer/login.html',error=False)
     user = request.form['username']
     password = request.form['password']
@@ -196,6 +194,13 @@ def ordercancelling(orderid):
     db.update_product_quantity_on_cancel(orderid,get_quantity[0])
     update = db.update_order_details_to_cancel(orderid)
     return redirect('/cordercancel/')
+
+@app.route('/corderhistory/')
+def corderhistory():
+    if 'customer' not in session:
+        return redirect(url_for('logoutall'))
+    order_history = db.product_fetch_for_history(session['customer'])
+    return render_template('customer/orderhistory.html',order_history=order_history)
 
 
 

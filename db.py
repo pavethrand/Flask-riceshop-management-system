@@ -186,6 +186,7 @@ class RiceDatabase:
         self.close()
         return True
     
+    #customer-> update status
     def update_order_details_to_cancel(self, id):
         try:
             self.connect()
@@ -200,6 +201,21 @@ class RiceDatabase:
             print("Error while updating order details:", e)
         finally:
             self.close()
+            return updated
+        
+    #customer -> values for history
+    def product_fetch_for_history(self, username):
+        self.connect()
+        query = """
+            SELECT o.order_id, o.product_id, p.brand, p.category, p.availability,o.quantity, o.roo, o.doo, o.status
+            FROM order_details o 
+            INNER JOIN product_details p ON o.product_id = p.product_id
+            WHERE o.username = %s;
+        """
+        self.cursor.execute(query, (username,))
+        orders = self.cursor.fetchall()
+        self.close()
+        return orders
 
  
     

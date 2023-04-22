@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body{
+            background-color:#cdecc7;
+        }
+    
+        /* Animation for the "Order History" title */
+        h2 {
+          animation: fadein 2s;
+        }
+    
+        /* Keyframes for the fadein animation */
+        @keyframes fadein {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+    
+        /* Animation for the "Back" button */
+        .btn-primary {
+          animation: slidein 2s;
+        }
+    
+        /* Keyframes for the slidein animation */
+        @keyframes slidein {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0%);
+          }
+        }
+    
+        /* Animation for the table rows */
+        .table tbody tr {
+          animation: fadein 2s;
+        }
+    
+        /* Animation for the table cells */
+        .table td {
+          animation: fadein 2s;
+        }
+    </style>
+    <link rel="icon" href="{{url_for('static',filename='icon.png')}}" type="image/x-icon">
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center mt-4 mb-2">
+        <h2>Order History</h2>
+    </div>
+    <div class="row justify-content-end mb-4">
+        <div class="col-auto">
+            <a href="/cdashboard/" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                            <th>Order ID</th>
+                            <th>Product ID</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Bag Size (kg)</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+                            <th>Date of Purchase</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in order_history %}
+                            <tr>
+                                <td>{{ order[0] }}</td>
+                                <td>{{ order[1] }}</td>
+                                <td>{{ order[2] }}</td>
+                                <td>{{ order[3] }}</td>
+                                <td>{{ order[4] }}</td>
+                                <td>{{ order[5] }}</td>
+                                <td>{{ order[6] }}</td>
+                                <td>{{ order[7] }}</td>
+                                {% if order[8] == 'ORDERED' %}
+                                    <td class="bg-warning">{{ order[8] }}</td>
+                                {% elif order[8] == 'CANCELLED' %}
+                                    <td class="bg-danger">{{ order[8] }}</td>
+                                {% elif order[8] == 'PAID' %}
+                                    <td class="bg-success">{{order[8] }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    /* Animation for the table rows using jQuery */
+    $(document).ready(function() {
+      $('tbody tr').hide().each(function(i) {
+        $(this).delay(200 * i).fadeIn(1000);
+      });
+    });
+</script>
+
+</body>
+</html>
+
+    
