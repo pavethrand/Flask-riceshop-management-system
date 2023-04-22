@@ -217,17 +217,25 @@ class RiceDatabase:
         self.close()
         return orders
 
- 
-    
+#customer completed....
 
-
-
+    #admin-> view employee list
     def view_employees(self):
         self.connect()
         self.cursor.execute("SELECT * FROM employee")
         employees = self.cursor.fetchall()
         self.close()
         return employees
+    
+    #admin-> delete employee
+    def delete_employee(self, username):
+        self.connect()
+        self.cursor.execute("DELETE FROM employee WHERE username=%s", (username,))
+        self.conn.commit()
+        self.close()
+
+
+
     
     def view_customers(self):
         self.connect()

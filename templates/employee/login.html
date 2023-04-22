@@ -9,6 +9,26 @@
         .card{
             background-color:#3b064d;
             color:#cdecc7;
+            animation: fadein 2s;
+            -moz-animation: fadein 2s; /* Firefox */
+            -webkit-animation: fadein 2s; /* Safari and Chrome */
+            -o-animation: fadein 2s; /* Opera */
+        }
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @-moz-keyframes fadein { /* Firefox */
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @-webkit-keyframes fadein { /* Safari and Chrome */
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @-o-keyframes fadein { /* Opera */
+            from { opacity: 0; }
+            to   { opacity: 1; }
         }
     </style>
 {% endblock %}
@@ -29,15 +49,9 @@
                 <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password" required>
                 <label for="floatingPassword">Password</label>
               </div>
-              <div class="d-flex justify-content-between mb-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="rememberMe">
-                  <label class="form-check-label" for="rememberMe">
-                    Remember me
-                  </label>
-                </div>
-                <a href="#">Forgot Password?</a>
-              </div>
+              <!-- <div class="d-flex justify-content-between mb-3"> -->
+                <!-- <a href="#">Forgot Password?</a> -->
+              <!-- </div> -->
               <button type="submit" class="btn btn-primary d-block w-100">Login</button>
             </form>
             {% if error %}

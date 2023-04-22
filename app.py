@@ -127,13 +127,18 @@ def verifyotp(number,user):
         return render_template('/customer/otp_verified.html', value="otp_error")
     return redirect(url_for('logincus',error=False))
 
-#customer -> logout
-#add admin,employee at last
+#customer,employee,admin -> logout
 @app.route('/logout/',methods=['GET','POST'])
 def logoutall():
     if 'customer' in session:
         session.pop('customer', None)
         return redirect(url_for('logincus',error=False))
+    if 'employee' in session:
+        session.pop('employee', None)
+        return redirect(url_for('loginemp',error=False))
+    if 'admin' in session:
+        session.pop('admin', None)
+        return redirect(url_for('loginemp',error=False))
     return redirect(url_for('home'))
 
 #customer->make order
@@ -202,28 +207,59 @@ def corderhistory():
     order_history = db.product_fetch_for_history(session['customer'])
     return render_template('customer/orderhistory.html',order_history=order_history)
 
+# customer login backend completed
 
+# now admin,employee works.......
 
-
-
+# admin,employee -> login page
 @app.route('/loginemp/',methods=['POST','GET'])
 def loginemp():
+    if 'customer' in session or 'admin' in session or 'employee' in session:
+        return redirect(url_for('logoutall'))
     if request.method == 'GET':
         return render_template('employee/login.html',error=False)
 
     user = request.form['username']
     password = request.form['password']
     if user == 'admin' and password == 'admin':
-        return render_template('admin/dashboard.html')
+        session['admin'] = user
+        return redirect('/edashboard/')
     res = db.check_login('employee',user,password)
     if res == True:
-        return render_template('employee/dashboard.html',username = user)
+        session['employee'] = user
+        return redirect('/edashboard/')
     return render_template('employee/login.html',error=True)
 
+#admin,employee -> dashboard
+@app.route('/edashboard/')
+def edashboard():
+    if 'employee' in session:
+        return render_template('employee/dashboard.html',user=session['employee'])
+    elif 'admin' in session:
+        return render_template('employee/dashboard.html',user=session['admin'])
+    return redirect(url_for('logoutall'))
+
+#admin -> add,edit,delete employee
 @app.route('/editemployee/',methods=['POST','GET'])
 def editemp():
-    employees = db.view_employees()
-    return render_template('admin/editemployee.html',employees=employees)
+    if 'admin' in session:
+        employees = db.view_employees()
+        return render_template('employee/addemployee.html',employees=employees)
+    return redirect(url_for('logoutall'))
+
+#admin-> delete employee code
+@app.route('/adeleteemployee/<string:username>')
+def adeleteemployee(username):
+    if 'admin' in session:
+        db.delete_employee(username) 
+        return redirect('/editemployee/')
+    return redirect(url_for('logoutall'))
+
+
+
+
+
+
 
 @app.route('/editcustomer/',methods=['POST','GET'])
 def editcus():

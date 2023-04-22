@@ -1,80 +1,132 @@
 {% extends 'base.html' %}
 
-{% block title %}{{username}} Dashboard - Senthur Traders {% endblock %}
-{% block head %}
+{% block title %}Dashboard - Senthur Traders {% endblock %}
+{% block head%}
 <style>
-    .user-space{
-    height: 80px;
-    width: 100%;
-    }
-    nav{
-    margin-bottom: 10px;
-    background-color: beige;
+.card {
+  transition: all 0.3s ease;
 }
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+.btn {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #333;
+}
+
+
 </style>
 <link href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-pqUuglES+k4W4i4jKScDmBQ2wZ5U6WnU6f78Kq3PL+Jd4M4Fnc9KxR4+GYQ2wC/jYlJ8H6+AV/iFg1bE+tL1qw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" integrity="sha512-DzAQlUhDy7OWCKX0m0yfC3LmQ2DwaRZz70rDkVrBd8qyqVjKpEDnB7oiuTD9XZj7zZJKtCsqwImOXk/gtEaTjg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 {% endblock %}
 {% block body %}
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand">{{username}} Dashboard</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active">
-              <span class="bi bi-speedometer2"></span> Dashboard
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/editcustomer/">
-              <span class="bi bi-person-plus"></span> Add/Edit Customer
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/verifycustomer/">
-              <span class="bi bi-people"></span> Verify Customer
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/addproduct/">
-              <span class="bi bi-plus"></span> Add/Edit Product
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/addsupplier/">
-              <span class="bi bi-plus"></span> Add/Edit Supplier
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/purchase/">
-              <span class="bi bi-cart-plus"></span> Make Purchase
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/billing/">
-              <span class="bi bi-cash-coin"></span> Verify Billing &amp; Payment
-            </a>
-          </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/salesemp/">
-                <span data-feather="user-plus"></span>
-                Add Sales(Customer)
-              </a>
-            </li>
-          </ul>
+<div class="container">
+    <h1>Welcome, {{ user }}!</h1>
+    <div class="container">
+      <div class="text-end">
+          <a href="{{ url_for('logoutall') }}" class="btn btn-danger">Logout</a>
+          <br><br>
+      </div>
+    </div>
+    <div class="row">
+      {% if 'admin' in session %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Employee</h5>
+            <p class="card-text">Add, edit and delete the Employee details</p>
+            <a href="/editemployee/" class="btn btn-primary">Click here</a>
+          </div>
         </div>
-      </nav>
-      <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        <div class="user-space"></div>
-      </main>
-      
+      </div>
+      {% endif %}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Customer</h5>
+              <p class="card-text">Add, edit and delete the Customer details</p>
+              <a href="/editcustomer/" class="btn btn-primary">Click here</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Verify</h5>
+              <p class="card-text">Verify the Unverified Customers</p>
+              <a href="/verifycustomer/" class="btn btn-warning">Click here</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Product</h5>
+              <p class="card-text">Add, Edit the Product Details</p>
+              <a href="/addproduct/" class="btn btn-primary">Click here</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Supplier</h5>
+              <p class="card-text">Add, Edit the Supplier Details</p>
+              <a href="/addsupplier/" class="btn btn-primary">Click here</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Purchase</h5>
+              <p class="card-text">Buy Stocks from Supplier</p>
+              <a href="/purchase/" class="btn btn-success">Click here</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Billing</h5>
+              <p class="card-text">Make Bill and Verify the Payment from the Customer</p>
+              <a href="/billing/" class="btn btn-info">Click here</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Report</h5>
+              <p class="card-text">Generate Purchase and Sales Report</p>
+              <a href="#" class="btn btn-info">Purchase</a>
+              <a href="#" class="btn btn-dark">Sales</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Customer Sale</h5>
+              <p class="card-text">Order the Products for the Customer</p>
+              <a href="/salesemp/" class="btn btn-dark">Click here</a>
+            </div>
+          </div>
+        </div>   
     </div>
   </div>
+<script>
 
-  
+</script>
+
+
 {% endblock %}

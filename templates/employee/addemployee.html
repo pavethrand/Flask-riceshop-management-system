@@ -2,25 +2,12 @@
 {% block title %} Add/Edit Employee - Senthur Traders{% endblock %}
 {% block head %}
 <style>
-    #page-info{
-        color: rgb(153, 14, 14);
-    }
-    .user-space{
-    height: 90px;
-    width: 100%;
-
-}
-nav{
-    margin-bottom: 10px;
-    background-color: beige;
-}
 </style>
 
 {% endblock %}
 {% block body %}
     
       <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        <div class="user-space"></div>
       </main>
 
       <div class="container">
@@ -60,8 +47,8 @@ nav{
           <!-- Employee List -->
           <div class="col-md-6">
             <h2>Employee List</h2>
-            <table class="table">
-              <thead>
+            <table class="table table-hover">
+              <thead class="table-primary">
                 <tr>
                   <th>Username</th>
                   <th>Full Name</th>
@@ -76,14 +63,17 @@ nav{
                   <td>{{ employee[1] }}</td>
                   <td>{{ employee[3] }}</td>
                   <td>
-                    <a href="/edit/{{ employee[0] }}">edit</a>
-                    <a href="/delete/{{ employee[0] }}">delete</i></a>
+                    <div class="btn-group" role="group">
+                      <a href="/edit/{{ employee[0] }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                      <a href="/adeleteemployee/{{ employee[0] }}" class="btn btn-outline-danger btn-sm">Delete</a>
+                    </div>
                   </td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
+          
         </div>
       </div>
   
