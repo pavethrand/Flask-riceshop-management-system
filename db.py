@@ -280,11 +280,9 @@ class RiceDatabase:
             return False
         finally:
             self.close()
-
-
-
-
-    
+            return True
+        
+    #admin, employee -> show customers in add customer page
     def view_customers(self):
         self.connect()
         self.cursor.execute("SELECT * FROM customer")
@@ -292,6 +290,49 @@ class RiceDatabase:
         self.close()
         return customer
     
+    #admin,employee -> delete customer
+    def delete_customer(self, username):
+        self.connect()
+        self.cursor.execute("DELETE FROM customer WHERE username=%s", (username,))
+        self.conn.commit()
+        self.close()
+        return True
+    
+    #admin,employee -> get_customer_details_by_username
+    def get_customer_details_by_username(self,username):
+        self.connect()
+        query= "SELECT username,fullname,password,mobile,address FROM customer where username = %s"
+        values=(username,)
+        self.cursor.execute(query, values)
+        customer_details = self.cursor.fetchone()
+        self.close()
+        return customer_details
+    
+    #admin,employee -> update customer
+    def edit_customer_todb(self, username, fullname, password, mobile, address):
+        self.connect()
+        sql = "UPDATE customer SET fullname = %s, password = %s, mobile = %s, address = %s WHERE username = %s"
+        values = (fullname, password, mobile, address, username)
+        try:
+            self.cursor.execute(sql, values)
+            self.conn.commit()
+            return True
+        except mysql.connector.Error as error:
+            print("Error due to ", error)
+            return False
+        finally:
+            self.close()
+            return True
+
+
+
+
+
+
+
+
+
+
     def unverify_customers_list(self):
         self.connect()
         self.cursor.execute("SELECT * FROM customer where verified = 0")

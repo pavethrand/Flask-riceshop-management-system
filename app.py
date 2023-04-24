@@ -305,26 +305,146 @@ def adeleteemployee(username):
         return redirect('/editemployee/')
     return redirect(url_for('logoutall'))
 
-
-
-
-
-
-
+#admin,employee -> add,edit,delete customer
 @app.route('/editcustomer/',methods=['POST','GET'])
 def editcus():
-    customers = db.view_customers()
-    return render_template('employee/editcustomer.html',customers=customers)
+    if 'employee' in session or 'admin' in session:
+        customers = db.view_customers()
+        if request.method == 'GET':
+            return render_template('employee/addcustomer.html',customers=customers,error=None)
+        if request.method == 'POST':
+             username = request.form.get('username')
+             fullname = request.form.get('fullname')
+             password = request.form.get('password')
+             mobile = request.form.get('mobile')
+             address = request.form.get('address')
+             if not (8 <= len(username) <= 15):
+                return render_template('employee/addcustomer.html',customers=customers,error="Username should be between 8 to 15 characters")
+             if not (5 <= len(fullname) <= 40):
+                return render_template('employee/addcustomer.html',customers=customers,error="Enter Valid Full Name(5-40 characters)")
+             if not (8 <= len(password) <= 20):
+                return render_template('employee/addcustomer.html',customers=customers,error="invalid password length (8-20 characters)")
+             if not (len(mobile) == 10 and mobile.isdigit()):
+                return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mobile number (10 numbers only)")
+             if len(address) == 0:
+                return render_template('employee/addcustomer.html',customers=customers,error="Enter address please....")
+             if db.check_customer_username(username):
+                 return render_template('employee/addcustomer.html',customers=customers,error="username already exists")
+             add_customer = db.customer_signup(username,fullname,password,mobile,address,verify=1)
+             if add_customer:
+                 return redirect('/editcustomer/')
+             return render_template('employee/addemployee.html',customers=customers,error="Error in updating in db")
+    return redirect(url_for('logoutall'))
 
+#admin,employee -> delete customer
+# @app.route('/adeletecustomer/<string:username>')
+# def adeletecustomer(username):
+#     if 'admin' in session or 'employee' in session:
+#         db.delete_customer(username) 
+#         return redirect('/editcustomer/')
+#     return redirect(url_for('logoutall'))
+
+#admin,employee -> edit customer page
+@app.route('/editcustomer/<string:username>',methods=['POST','GET'])
+def editcustomer_page(username):
+    if 'admin' in session or 'employee' in session:
+        customers = db.view_customers()
+        if request.method == 'GET':
+            edit_value = db.get_customer_details_by_username(username)
+            return render_template('employee/editcustomer.html',customers=customers,edit_value=edit_value,error=None)
+        if request.method == 'POST':
+            fullname = request.form.get('fullname')
+            password = request.form.get('password')
+            mobile = request.form.get('mobile')
+            address = request.form.get('address')
+            if not (5 <= len(fullname) <= 40):
+               return render_template('employee/addcustomer.html',customers=customers,error="Enter Valid Full Name(5-40 characters)")
+            if not (8 <= len(password) <= 20):
+               return render_template('employee/addcustomer.html',customers=customers,error="invalid password length (8-20 characters)")
+            if not (len(mobile) == 10 and mobile.isdigit()):
+               return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mobile number (10 numbers only)")
+            if len(address) == 0:
+               return render_template('employee/addcustomer.html',customers=customers,error="Enter address please....")
+            edit_customer = db.edit_customer_todb(username,fullname,password,mobile,address)
+            if edit_customer:
+                return redirect('/editcustomer/')
+            return render_template('employee/addemployee.html',customers=customers,error="Error in updating in db")
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> show unverified customers
 @app.route('/verifycustomer/',methods=['POST','GET'])
 def vercus():
-    vcustomers = db.unverify_customers_list()
-    return render_template('employee/verifycus.html',customers=vcustomers)
+    if 'admin' in session or 'employee' in session:
+        vcustomers = db.unverify_customers_list()
+        return render_template('employee/verifycus.html',customers=vcustomers)
+    return redirect(url_for('logoutall'))
 
-@app.route('/addproduct/')
+#admin,employee -> verify the unverified customers
+@app.route('/verifycustomer/<string:username>',methods=['POST','GET'])
+def vercus_by_username(username):
+    if 'admin' in session or 'employee' in session:
+        vcustomers = db.verify_otp(username)
+        if vcustomers:
+            return redirect('/verifycustomer/')
+        return "<html><body><script>alert('Unble to verify customer')"
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> delete unverified customer
+@app.route('/deletecustomer/<string:username>')
+def deletecustomer(username):
+    if 'admin' in session or 'employee' in session:
+        db.delete_customer(username) 
+        return redirect('/verifycustomer/')
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> add,edit products
+@app.route('/addproduct/',methods=['GET','POST'])
 def addproduct():
-    products = db.view_products()
-    return render_template('employee/addproduct.html',products = products)
+    if 'admin' in session or 'employee' in session:
+        products = db.view_products()
+        if request.method == 'GET':
+            return render_template('employee/addproduct.html',products = products,error=None)
+        brand = request.form.get('brand')
+        category = request.form.get('category')
+        availability = request.form.get('availability')
+        quantity = request.form.get('quantity')
+        rate_purchase = request.form.get('rate_purchase')
+        rate_sales = request.form.get('rate_sales')
+        if not all([brand, category, availability, quantity, rate_purchase, rate_sales]):
+            return render_template('employee/addproduct.html',products = products,error='Please fill out all fields.')
+        if not availability.isdigit() or not quantity.isdigit():
+            return render_template('employee/addproduct.html',products = products,error='Availability and Quantity must be numbers.')
+        #code here.....
+        return redirect('/addproduct/')
+    return redirect(url_for('logoutall'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/addsupplier/')
 def addsupplier():

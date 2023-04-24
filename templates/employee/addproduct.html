@@ -1,89 +1,104 @@
 {% extends 'base.html' %}
 {% block title %} Add/Edit Product - Senthur Traders{% endblock %}
 {% block head %}
-<style></style>
+<style>
+</style>
+
 {% endblock %}
 {% block body %}
-<div class="container">
-    <h1>Add/Edit Product Details</h1>
-    <hr>
+    
+      <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      </main>
 
-    <div class="row">
-      <!-- Employee Form -->
-      <div class="col-md-6">
-        <h2>Product Form</h2>
-        <form method="POST">
-          <div class="mb-3">
-            <label for="fullname" class="form-label">Brand </label>
-            <input type="text" class="form-control"required>
+      <div class="container">
+        <h1>Add/Edit Product Details</h1>
+        <div class="row justify-content-end mb-4">
+          <div class="col-auto">
+              <a href="/edashboard/" class="btn btn-primary">Back</a>
           </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Category</label>
-            <input type="text" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label for="mobile" class="form-label">Availability(per Bags)</label>
-            <input type="tel" class="form-control" id="mobile" required>
-          </div>
-          <div class="mb-3">
-            <label for="mobile" class="form-label">Quantity(in Bags)</label>
-            <input type="tel" class="form-control" id="mobile" required>
-          </div>
-          <div class="mb-3">
-            <label for="username" class="form-label">Rate of Purchase</label>
-            <input type="text" class="form-control"required>
-          </div>
-          <div class="mb-3">
-            <label for="username" class="form-label">Rate of Sales</label>
-            <input type="text" class="form-control"required>
-          </div>
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="reset" class="btn btn-secondary">Clear</button>
-        </form>
       </div>
-
-      <!-- Employee List -->
-      <div class="col-md-6">
-        <h2>Product List</h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Product Id</th>
-              <th>Brand</th>
-              <th>Category</th>
-              <th>Availability(per Bags)</th>
-              <th>Quantity(in Bags)</th>
-              <th>Rate of Purchase</th>
-              <th>Rate of Sales</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for product in products %}
-            <tr>
-              <td>{{ product[0]}}</td>
-              <td>{{ product[1]}}</td>
-              <td>{{ product[2]}}</td>
-              <td>{{ product[3]}}</td>
-              <td>{{ product[4]}}</td>
-              <td>{{ product[5]}}</td>
-              <td>{{ product[6]}}</td>
-              <td>
-                <a href="/edit/{{ product[0] }}">edit</a>
-                <a href="/delete/{{ product[0] }}">delete</i></a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Customer Form</h2>
+            <form method="POST" action="/addproduct/">
+              <div class="mb-3">
+                <label for="fullname" class="form-label">Brand</label>
+                <input type="text" class="form-control" name="brand" required>
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Category</label>
+                <input type="text" class="form-control" name="category" required>
+              </div>
+              <div class="mb-3">
+                <label for="availability" class="form-label">Availability (per Bags)</label>
+                <input type="number" class="form-control" name="availability" required>
+              </div>
+              <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity (in Bags)</label>
+                <input type="number" class="form-control" name="quantity" required>
+              </div>
+              <div class="mb-3">
+                <label for="rate_purchase" class="form-label">Rate of Purchase</label>
+                <input type="text" class="form-control" name="rate_purchase" pattern="[0-9]*[.]?[0-9]+" title="Please enter a valid number" required>
+              </div>
+              <div class="mb-3">
+                <label for="rate_sales" class="form-label">Rate of Sales</label>
+                <input type="text" class="form-control" name="rate_sales" pattern="[0-9]*[.]?[0-9]+" title="Please enter a valid number" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="reset" class="btn btn-secondary">Clear</button>
+            </form>
+            {% if error != None %}
+            <div class="alert alert-danger" role="alert">
+              {{error}}
+            </div>
+            {% endif %}
+          </div>
+  
+          <!-- Customer List -->
+          <div class="col-md-6">
+            <h2>Customer List</h2>
+            <table class="table table-hover">
+              <thead class="table-primary">
+                <tr>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Bag(kg)</th>
+                  <th>Quantity</th>
+                  <th>Purchase Rate</th>
+                  <th>Sales Rate</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for product in products %}
+                <tr>
+                  <td>{{ product[1]}}</td>
+                  <td>{{ product[2] }}</td>
+                  <td>{{ product[3] }}</td>
+                  <td>{{ product[4] }}</td>
+                  <td>{{ product[5] }}</td>
+                  <td>{{ product[6] }}</td>
+                  <td>
+                    <!-- <div class="btn-group" role="group"> -->
+                      <a href="/editcustomer/{{ product[0] }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                      <!-- <a href="/adeletecustomer/{{ product[0] }}" class="btn btn-outline-danger btn-sm">Delete</a> -->
+                    <!-- </div> -->
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          
+        </div>
       </div>
+  
+      <!-- Bootstrap 5 JS (Required for Bootstrap Features) -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+      
     </div>
   </div>
-
-  <!-- Bootstrap 5 JS (Required for Bootstrap Features) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
-  
-</div>
-</div>
 
 {% endblock %}

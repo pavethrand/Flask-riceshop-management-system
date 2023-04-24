@@ -6,41 +6,43 @@
 
 {% endblock %}
 {% block body %}
+    
       <main role="main" class="main-content col-md-9 ml-sm-auto col-lg-10 px-md-4">
       </main>
 
       <div class="container">
         <h1>Add/Edit Customer Details</h1>
-            <div class="row justify-content-end mb-4">
-                <div class="col-auto">
-                    <a href="/edashboard/" class="btn btn-primary">Back</a>
-                </div>
-            </div>
+        <div class="row justify-content-end mb-4">
+          <div class="col-auto">
+              <a href="/edashboard/" class="btn btn-primary">Back</a>
+          </div>
+      </div>
         <hr>
+  
         <div class="row">
           <!-- Employee Form -->
           <div class="col-md-6">
             <h2>Customer Form</h2>
-            <form method="POST" action="/editcustomer/{{edit_value[0]}}">
+            <form method="POST" action="/editcustomer/">
               <div class="mb-3">
                 <label for="username" class="form-label">Username (8-15 characters)</label>
-                <input type="text" class="form-control" id="username" name="username" minlength="8" maxlength="15" value="{{edit_value[0]}}" disabled required>
+                <input type="text" class="form-control" id="username" name="username" minlength="8" maxlength="15" required>
               </div>
               <div class="mb-3">
                 <label for="fullname" class="form-label">Full Name (up to 40 characters)</label>
-                <input type="text" class="form-control" id="fullname" name="fullname" maxlength="40" value="{{edit_value[1]}}" required>
+                <input type="text" class="form-control" id="fullname" name="fullname" maxlength="40" required>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Password (8-20 characters)</label>
-                <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="20" value="{{edit_value[2]}}" required>
+                <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="20" required>
               </div>
               <div class="mb-3">
                 <label for="mobile" class="form-label">Mobile (10 numbers)</label>
-                <input type="tel" class="form-control" id="mobile" name="mobile" minlength="10" maxlength="10" pattern="[0-9]{10}" value="{{edit_value[3]}}" required>
+                <input type="tel" class="form-control" id="mobile" name="mobile" minlength="10" maxlength="10" pattern="[0-9]{10}" required>
               </div>
               <div class="mb-3">
                 <label for="address" class="form-label">Address (up to 50 characters)</label>
-                <textarea class="form-control" id="address" name="address" maxlength="50" required>{{edit_value[4]}}</textarea>
+                <textarea class="form-control" id="address" name="address" maxlength="50" required></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Save</button>
               <button type="reset" class="btn btn-secondary">Clear</button>
@@ -52,7 +54,7 @@
             {% endif %}
           </div>
   
-          <!-- Employee List -->
+          <!-- Customer List -->
           <div class="col-md-6">
             <h2>Customer List</h2>
             <table class="table table-hover">
