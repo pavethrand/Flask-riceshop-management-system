@@ -244,7 +244,57 @@ def edashboard():
 def editemp():
     if 'admin' in session:
         employees = db.view_employees()
-        return render_template('employee/addemployee.html',employees=employees)
+        if request.method == 'GET':
+            return render_template('employee/addemployee.html',employees=employees,error=None)
+        if request.method == 'POST':
+             username = request.form.get('username')
+             fullname = request.form.get('fullname')
+             password = request.form.get('password')
+             mobile = request.form.get('mobile')
+             address = request.form.get('address')
+             if not (8 <= len(username) <= 15):
+                return render_template('employee/addemployee.html',employees=employees,error="Username should be between 8 to 15 characters")
+             if not (5 <= len(fullname) <= 40):
+                return render_template('employee/addemployee.html',employees=employees,error="Enter Valid Full Name(5-40 characters)")
+             if not (8 <= len(password) <= 20):
+                return render_template('employee/addemployee.html',employees=employees,error="invalid password length (8-20 characters)")
+             if not (len(mobile) == 10 and mobile.isdigit()):
+                return render_template('employee/addemployee.html',employees=employees,error="Error due to invalid mobile number (10 numbers only)")
+             if len(address) == 0:
+                return render_template('employee/addemployee.html',employees=employees,error="Enter address please....")
+             if db.check_employee_username(username):
+                 return render_template('employee/addemployee.html',employees=employees,error="username already exists")
+             add_employee = db.add_employee_todb(username,fullname,password,mobile,address)
+             if add_employee:
+                 return redirect('/editemployee/')
+             return render_template('employee/addemployee.html',employees=employees,error="Error in updating in db")
+    return redirect(url_for('logoutall'))
+
+#admin -> edit employee page
+@app.route('/editemployee/<string:username>',methods=['POST','GET'])
+def editemployee_page(username):
+    if 'admin' in session:
+        employees = db.view_employees()
+        if request.method == 'GET':
+            edit_value = db.get_employee_details_by_username(username)
+            return render_template('employee/editemployee.html',employees=employees,error=None,edit_value=edit_value)
+        if request.method == 'POST':
+            fullname = request.form.get('fullname')
+            password = request.form.get('password')
+            mobile = request.form.get('mobile')
+            address = request.form.get('address')
+            if not (5 <= len(fullname) <= 40):
+               return render_template('employee/addemployee.html',employees=employees,error="Enter Valid Full Name(5-40 characters)")
+            if not (8 <= len(password) <= 20):
+               return render_template('employee/addemployee.html',employees=employees,error="invalid password length (8-20 characters)")
+            if not (len(mobile) == 10 and mobile.isdigit()):
+               return render_template('employee/addemployee.html',employees=employees,error="Error due to invalid mobile number (10 numbers only)")
+            if len(address) == 0:
+               return render_template('employee/addemployee.html',employees=employees,error="Enter address please....")
+            edit_employee = db.edit_employee_todb(username,fullname,password,mobile,address)
+            if edit_employee:
+                return redirect('/editemployee/')
+            return render_template('employee/addemployee.html',employees=employees,error="Error in updating in db")
     return redirect(url_for('logoutall'))
 
 #admin-> delete employee code

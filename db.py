@@ -233,6 +233,54 @@ class RiceDatabase:
         self.cursor.execute("DELETE FROM employee WHERE username=%s", (username,))
         self.conn.commit()
         self.close()
+        return True
+    
+    #admin-> check employee username presence in database
+    def check_employee_username(self,username):
+        self.connect()
+        query = "SELECT * FROM employee WHERE username = '%s'"
+        self.cursor.execute(query % username)
+        result = self.cursor.fetchall()
+        self.close()
+        return bool(result)
+    
+    #admin->add employee
+    def add_employee_todb(self,username,fullname,password,mobile,address):
+        self.connect()
+        dor = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        values = (username, fullname, password, mobile, address, dor)
+        sql = 'INSERT INTO employee (username, fullname, password, mobile, address, dor) VALUES ( %s, %s, %s, %s, %s, %s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    #admin -> get_employee_details_by_username
+    def get_employee_details_by_username(self,username):
+        self.connect()
+        query= "SELECT username,fullname,password,mobile,address FROM employee where username = %s"
+        values=(username,)
+        self.cursor.execute(query, values)
+        employee_details = self.cursor.fetchone()
+        self.close()
+        return employee_details
+    
+    #admin-> update employee
+    def edit_employee_todb(self, username, fullname, password, mobile, address):
+        self.connect()
+        sql = "UPDATE employee SET fullname = %s, password = %s, mobile = %s, address = %s WHERE username = %s"
+        values = (fullname, password, mobile, address, username)
+        try:
+            self.cursor.execute(sql, values)
+            self.conn.commit()
+            return True
+        except mysql.connector.Error as error:
+            print("Error due to ", error)
+            return False
+        finally:
+            self.close()
+
 
 
 
@@ -271,3 +319,5 @@ class RiceDatabase:
         order = self.cursor.fetchall()
         self.close()
         return order
+    
+    
