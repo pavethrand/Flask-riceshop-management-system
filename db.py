@@ -324,15 +324,7 @@ class RiceDatabase:
             self.close()
             return True
 
-
-
-
-
-
-
-
-
-
+    #admin,employee -> get unverified customers
     def unverify_customers_list(self):
         self.connect()
         self.cursor.execute("SELECT * FROM customer where verified = 0")
@@ -340,6 +332,7 @@ class RiceDatabase:
         self.close()
         return customer
     
+    #admin,employee -> view product details
     def view_products(self):
         self.connect()
         self.cursor.execute("SELECT * FROM product_details")
@@ -347,12 +340,103 @@ class RiceDatabase:
         self.close()
         return product
     
+    #admin,employee -> add product 
+    def add_product_todb(self,brand,category,availability,quantity,rop,ros):
+        self.connect()
+        values = (brand,category,availability,quantity,rop,ros)
+        sql = 'INSERT INTO product_details (brand,category,availability,quantity,rop,ros) VALUES ( %s, %s, %s, %s, %s, %s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    #admin,employee -> get_product_details_by_id
+    def get_product_details_by_id(self,id):
+        self.connect()
+        query= "SELECT * FROM product_details where product_id = %s"
+        values=(id,)
+        self.cursor.execute(query, values)
+        product__details = self.cursor.fetchone()
+        self.close()
+        return product__details
+    
+    #admin,employee -> edit product values in db
+    def edit_product_todb(self,id,brand,category,availability,quantity,rop,ros):
+        self.connect()
+        sql = "UPDATE product_details SET brand = %s, category = %s, availability = %s, quantity = %s,rop = %s, ros = %s WHERE product_id = %s"
+        values = (brand,category,availability,quantity,rop,ros,id)
+        try:
+            self.cursor.execute(sql, values)
+            self.conn.commit()
+            return True
+        except mysql.connector.Error as error:
+            print("Error due to ", error)
+            return False
+        finally:
+            self.close()
+            return True
+
+    #admin,employee -> view all suppliers
     def view_suppliers(self):
         self.connect()
         self.cursor.execute("SELECT * FROM supplier")
         supplier = self.cursor.fetchall()
         self.close()
         return supplier
+    
+    #admin,employee -> check supplier name already present in db or not
+    def checksupplier_name(self, supplier):
+        self.connect()
+        query = "SELECT * FROM supplier WHERE supplier = '%s'"
+        self.cursor.execute(query % supplier)
+        result = self.cursor.fetchall()
+        self.close()
+        return bool(result)
+    
+    #admin,employee -> add supplier 
+    def add_product_todb(self,supplier,mobile,address):
+        self.connect()
+        dor = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        values = (supplier,mobile,address,dor)
+        sql = 'INSERT INTO supplier (supplier,mobile,address,dor) VALUES ( %s, %s, %s, %s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    #admin,employee -> get_supplier_details_by_supplier
+    def get_supplier_details_by_supplier(self,supplier):
+        self.connect()
+        query= "SELECT * FROM supplier where supplier = %s"
+        values=(supplier,)
+        self.cursor.execute(query, values)
+        supplier_details = self.cursor.fetchone()
+        self.close()
+        return supplier_details
+    
+    #admin,employee -> update supplier values
+    def edit_supplier_todb(self,supplier,mobile,address):
+        self.connect()
+        sql = "UPDATE supplier SET mobile = %s, address = %s WHERE supplier = %s"
+        values = (mobile,address,supplier)
+        try:
+            self.cursor.execute(sql, values)
+            self.conn.commit()
+            return True
+        except mysql.connector.Error as error:
+            print("Error due to ", error)
+            return False
+        finally:
+            self.close()
+            return True
+
+
+
+
+
+
     
     def view_billing(self):
         self.connect()

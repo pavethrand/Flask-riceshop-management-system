@@ -414,8 +414,80 @@ def addproduct():
             return render_template('employee/addproduct.html',products = products,error='Please fill out all fields.')
         if not availability.isdigit() or not quantity.isdigit():
             return render_template('employee/addproduct.html',products = products,error='Availability and Quantity must be numbers.')
-        #code here.....
-        return redirect('/addproduct/')
+        add_product = db.add_product_todb(brand,category,availability,quantity,rate_purchase,rate_sales)
+        if add_product:
+            return redirect('/addproduct/')
+        return "<html><head><script>alert('error in adding product')</script></head></html>"
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> edit products page
+@app.route('/addproduct/<string:productid>',methods=['GET','POST'])
+def editproduct(productid):
+    if 'admin' in session or 'employee' in session:
+        products = db.view_products()
+        if request.method == 'GET':
+            edit_value = db.get_product_details_by_id(productid)
+            return render_template('employee/editproduct.html',products = products,edit_value=edit_value,error=None) 
+        brand = request.form.get('brand')
+        category = request.form.get('category')
+        availability = request.form.get('availability')
+        quantity = request.form.get('quantity')
+        rate_purchase = request.form.get('rate_purchase')
+        rate_sales = request.form.get('rate_sales')
+        if not all([brand, category, availability, quantity, rate_purchase, rate_sales]):
+            return render_template('employee/addproduct.html',products = products,error='Please fill out all fields.')
+        if not availability.isdigit() or not quantity.isdigit():
+            return render_template('employee/addproduct.html',products = products,error='Availability and Quantity must be numbers.')
+        edit_product = db.edit_product_todb(productid,brand,category,availability,quantity,rate_purchase,rate_sales)
+        if edit_product:
+            return redirect('/addproduct/')
+        return "<html><head><script>alert('error in Editing product')</script></head></html>"
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> add,edit supplier
+@app.route('/addsupplier/',methods=['GET','POST'])
+def addsupplier():
+    if 'admin' in session or 'employee' in session:
+        suppliers = db.view_suppliers()
+        if request.method=='GET':
+            return render_template('employee/addsupplier.html',suppliers = suppliers,error=None)
+        supplier = request.form['supplier']
+        mobile = request.form['mobile']
+        address = request.form['address']
+        # Check for empty fields
+        if not supplier or not mobile or not address:
+            return render_template('employee/addsupplier.html', suppliers=suppliers, error='Please fill in all fields.')
+        # Check if mobile number is valid
+        if not re.match(r'^[0-9]{10}$', mobile):
+            return render_template('employee/addsupplier.html', suppliers=suppliers, error='Please enter a valid 10-digit mobile number.')
+        if db.checksupplier_name(supplier):
+            return render_template('employee/addsupplier.html', suppliers=suppliers, error='Supplier name already exists')
+        add_supplier= db.add_product_todb(supplier,mobile,address)
+        if add_supplier:
+            return redirect('/addsupplier/')
+        return render_template('employee/addsupplier.html',suppliers = suppliers,error="Error in adding database")
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> add,edit supplier
+@app.route('/addsupplier/<string:supplier>',methods=['GET','POST'])
+def editsupplier(supplier):
+    if 'admin' in session or 'employee' in session:
+        suppliers = db.view_suppliers()
+        edit_value = db.get_supplier_details_by_supplier(supplier)
+        if request.method=='GET':
+            return render_template('employee/editsupplier.html',suppliers = suppliers,edit_value=edit_value,error=None)
+        mobile = request.form['mobile']
+        address = request.form['address']
+        # Check for empty fields
+        if not supplier or not mobile or not address:
+            return render_template('employee/addsupplier.html', suppliers=suppliers, error='Please fill in all fields.')
+        # Check if mobile number is valid
+        if not re.match(r'^[0-9]{10}$', mobile):
+            return render_template('employee/addsupplier.html', suppliers=suppliers, error='Please enter a valid 10-digit mobile number.')
+        update_supplier = db.edit_supplier_todb(supplier,mobile,address)
+        if update_supplier:
+            return redirect('/addsupplier/')
+        return render_template('employee/addsupplier.html', suppliers=suppliers, error='Error in updating db....')
     return redirect(url_for('logoutall'))
 
 
@@ -436,20 +508,6 @@ def addproduct():
 
 
 
-
-
-
-
-
-
-
-
-
-
-@app.route('/addsupplier/')
-def addsupplier():
-    suppliers = db.view_suppliers()
-    return render_template('employee/addsupplier.html',suppliers = suppliers)
 
 @app.route('/purchase/',methods=['POST','GET'])
 def purchase():

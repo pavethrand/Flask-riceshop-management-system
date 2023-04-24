@@ -21,30 +21,30 @@
         <div class="row">
           <div class="col-md-6">
             <h2>Customer Form</h2>
-            <form method="POST" action="/addproduct/">
+            <form method="POST" action="/addproduct/{{edit_value[0]}}">
               <div class="mb-3">
                 <label for="fullname" class="form-label">Brand</label>
-                <input type="text" class="form-control" name="brand" required>
+                <input type="text" class="form-control" name="brand" value="{{edit_value[1]}}" required>
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Category</label>
-                <input type="text" class="form-control" name="category" required>
+                <input type="text" class="form-control" name="category" value="{{edit_value[2]}}" required>
               </div>
               <div class="mb-3">
                 <label for="availability" class="form-label">Availability (per Bags)</label>
-                <input type="number" class="form-control" name="availability" required>
+                <input type="number" class="form-control" name="availability" value="{{edit_value[3]}}" required>
               </div>
               <div class="mb-3">
                 <label for="quantity" class="form-label">Quantity (in Bags)</label>
-                <input type="number" class="form-control" name="quantity" required>
+                <input type="number" class="form-control" name="quantity" value="{{edit_value[4]}}" required>
               </div>
               <div class="mb-3">
                 <label for="rate_purchase" class="form-label">Rate of Purchase</label>
-                <input type="text" class="form-control" name="rate_purchase" pattern="[0-9]*[.]?[0-9]+" title="Please enter a valid number" required>
+                <input type="text" class="form-control" name="rate_purchase" pattern="[0-9]*[.]?[0-9]+" value="{{edit_value[5]}}" title="Please enter a valid number" required>
               </div>
               <div class="mb-3">
                 <label for="rate_sales" class="form-label">Rate of Sales</label>
-                <input type="text" class="form-control" name="rate_sales" pattern="[0-9]*[.]?[0-9]+" title="Please enter a valid number" required>
+                <input type="text" class="form-control" name="rate_sales" pattern="[0-9]*[.]?[0-9]+" title="Please enter a valid number" value="{{edit_value[6]}}" required>
               </div>
               <button type="submit" class="btn btn-primary">Save</button>
               <button type="reset" class="btn btn-secondary">Clear</button>
@@ -82,7 +82,7 @@
                   <td>{{ product[6] }}</td>
                   <td>
                     <!-- <div class="btn-group" role="group"> -->
-                      <a href="/addproduct/{{ product[0] }}" class="btn btn-outline-primary btn-sm">Edit</a>
+                      <a href="/editcustomer/{{ product[0] }}" class="btn btn-outline-primary btn-sm">Edit</a>
                       <!-- <a href="/adeletecustomer/{{ product[0] }}" class="btn btn-outline-danger btn-sm">Delete</a> -->
                     <!-- </div> -->
                   </td>

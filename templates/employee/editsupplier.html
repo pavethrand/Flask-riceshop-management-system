@@ -33,18 +33,18 @@
       <!-- Employee Form -->
       <div class="col-md-6 fade-in">
         <h2>Supplier Form</h2>
-        <form method="POST" action="/addsupplier/">
+        <form method="POST" action="/addsupplier/{{edit_value[0]}}">
           <div class="mb-3">
             <label for="username" class="form-label">Supplier</label>
-            <input type="text" class="form-control" name="supplier" required>
+            <input type="text" class="form-control" name="supplier" value="{{edit_value[0]}}" disabled>
           </div>
           <div class="mb-3">
             <label for="mobile" class="form-label">Mobile (10 numbers)</label>
-            <input type="tel" class="form-control" id="mobile" name="mobile" minlength="10" maxlength="10" pattern="[0-9]{10}" required>
+            <input type="tel" class="form-control" id="mobile" name="mobile" minlength="10" maxlength="10" pattern="[0-9]{10}" value="{{edit_value[1]}}" required>
           </div>
           <div class="mb-3">
             <label for="address" class="form-label">Address (up to 50 characters)</label>
-            <textarea class="form-control" id="address" name="address" maxlength="50" required></textarea>
+            <textarea class="form-control" id="address" name="address" maxlength="50" required>{{edit_value[2]}}</textarea>
           </div>
           <button type="submit" class="btn btn-primary">Save</button>
           <button type="reset" class="btn btn-secondary">Clear</button>
