@@ -170,7 +170,6 @@ def order_done():
         return redirect(url_for('logoutall'))
     product_id = request.form.get('product_id')
     total_product = request.form.get('total_product')
-    print(total_product)
     check_availability = db.product_availability(product_id)
     if check_availability[0] < int(total_product):
         return "<html><body><script>alert('Entered value is greater than available quantity')</script></body></html>"
@@ -511,7 +510,6 @@ def purchase2(product_id,supplier):
     if 'admin' in session or 'employee' in session:
         product = db.get_product_details_by_id(product_id)
         if request.method =='GET':
-            product = db.get_product_details_by_id(product_id)
             return render_template('employee/purchaseconfirm.html',supplier = supplier,product=product)
         total_product = request.form['total_product']
         if total_product == None:
@@ -523,13 +521,41 @@ def purchase2(product_id,supplier):
         return render_template('/employee/purchase_verified.html',value='error')
     return redirect(url_for('logoutall'))
 
-@app.route('/salesemp/')
+#admin, employee -> add,sales for customer
+@app.route('/salesemp/',methods=['POST','GET'])
 def salebyemployee():
-    products= db.view_products()
-    customers= db.view_customers()
-    return render_template('employee/sales_customer.html',products=products,customers=customers)
+    if 'admin' in session or 'employee' in session:
+        products= db.view_products()
+        customers= db.view_customers()
+        if request.method =='GET':
+            return render_template('employee/addsales.html',products=products,customers=customers)
+        product = request.form['product']
+        customer = request.form['customer']
+        if customer == '' or product == '':
+            return "please select any one option"
+        return redirect(url_for('salebyemployee2',product_id=int(product),username=customer))
+    return redirect(url_for('logoutall'))
 
-
+#admin, employee -> add,sales for customer page - 2
+@app.route('/salesemp/<int:product_id>/<string:username>',methods=['POST','GET'])
+def salebyemployee2(product_id,username):
+    if 'admin' in session or 'employee' in session:
+        product = db.get_product_details_by_id(product_id)
+        if request.method =='GET':
+            return render_template('employee/salesconfirm.html',customer = username,product=product)
+        total_product = request.form['total_product']
+        if total_product == None:
+            return render_template('/employee/purchase_verified.html',value='error')
+        check_availability = db.product_availability(product_id)
+        if check_availability[0] < int(total_product):
+            return "<html><body><script>alert('Entered value is greater than available quantity')</script></body></html>"
+        order_add=db.add_order(username,product_id,int(total_product),(float(total_product) * float(check_availability[1])))
+        if order_add:
+            reduce_product = db.reduce_product(product_id,check_availability[0]-int(total_product))
+            if reduce_product:
+                return render_template('employee/purchase_verified.html',value='success')
+        return render_template('employee/purchase_verified.html',value='error')
+    return redirect(url_for('logoutall'))
 
 
 

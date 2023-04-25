@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Purchase Confirm Page - Senthur Traders {% endblock %}
+{% block head %}
+{% endblock %}
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>Purchase Confirm</h4>
+          </div>
+          <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-4">Customer:</div>
+                <div class="col-8" name="supplier">{{ customer }}</div>
+              </div>
+            <div class="row mb-4">
+                <div class="col-4">Product ID:</div>
+                <div class="col-8" name="product_id">{{ product[0] }}</div>
+              </div>
+            <div class="row mb-4">
+              <div class="col-4">Product Name:</div>
+              <div class="col-8">{{ product[1] }}</div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-4">Brand:</div>
+              <div class="col-8">{{ product[2] }}</div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-4">Bag (in kg):</div>
+              <div class="col-8">{{ product[3] }}</div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-4">Availability:</div>
+              <div class="col-8">{{ product[4] }}</div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-4">Rate (per quantity):</div>
+              <div class="col-8">{{ product[5] }}</div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-4">Order:</div>
+              <div class="col-8 d-flex align-items-center">
+                <form method="POST" action="/salesemp/{{product[0]}}/{{customer}}">
+                <input type="number" name="total_product" class="form-control qty-input" value="1" min="1" max="{{ product[4] }}" style="width: 80px;">
+              </div>
+            </div>
+            <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg place-order-btn">Place Order</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+
+{% endblock %}

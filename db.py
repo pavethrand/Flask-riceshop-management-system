@@ -1,5 +1,6 @@
 import mysql.connector
 import datetime
+    
 
 db = mysql.connector.connect()
 
@@ -432,6 +433,7 @@ class RiceDatabase:
             self.close()
             return True
         
+    #admin,employee ->  make purchase
     def make_purchase_for_shop(self,product_id,supplier,bag,quantity,rop):
         self.connect()
         dop = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -443,6 +445,7 @@ class RiceDatabase:
         self.close()
         return inserted
     
+    #admin,employee -> make purchase 2
     def update_product_quantity_after_purchase(self, id, add_quantity):
         self.connect()
         self.cursor.execute("UPDATE product_details SET quantity = quantity + %s WHERE product_id = %s", (add_quantity, id))
@@ -456,7 +459,7 @@ class RiceDatabase:
     
     def view_billing(self):
         self.connect()
-        self.cursor.execute("SELECT * FROM order_details")
+        self.cursor.execute("SELECT * FROM order_details where status = 'ORDERED'")
         order = self.cursor.fetchall()
         self.close()
         return order
