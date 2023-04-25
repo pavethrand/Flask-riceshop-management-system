@@ -21,6 +21,9 @@ db.connect()
 otp = OTPGenerator()
 generated_otp=None
 
+config_path = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+config = pdfkit.configuration(wkhtmltopdf=config_path)
+
 #index page
 @app.route('/')
 def home():
@@ -561,8 +564,36 @@ def salebyemployee2(product_id,username):
 #admin,employee -> billing page
 @app.route('/billing/')
 def billing():
-    billing = db.view_billing()
-    return render_template('employee/billing.html',orders=billing)
+    if 'admin' in session or 'employee' in session:
+        billing = db.view_billing()
+        return render_template('employee/billing.html',orders=billing)
+    return redirect(url_for('logoutall'))
+
+#admin,employee -> billing page - payment mode
+@app.route('/billing/<int:order_id>',methods=['GET','POST'])
+def paymentmode(order_id):
+    if 'admin' in session or 'employee' in session:
+        if request.method =='GET':
+            return render_template('employee/paymentmode.html',id=order_id)
+        mode = request.form.get("mode")
+        if db.update_mode_paid(order_id):
+            
+    return redirect(url_for('logoutall'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #admin,employee -> cancelorder
 @app.route('/ecancelorder/<int:orderid>/<string:username>',methods=['GET','POST'])
@@ -576,16 +607,16 @@ def eordercancelling(orderid,username):
         return redirect('/billing/')
     return redirect(url_for('logoutall'))
 
+
 @app.route('/download_pdf/',methods=['GET','POST'])
 def download_pdf():
     billing = db.view_billing()
-    html = render_template("employee/billing.html",orders=billing)
-    pdf = pdfkit.from_string(html, False)
+    rendered = render_template('employee/billing.html',orders=billing)
+    pdf = pdfkit.from_string(rendered,False,configuration=config)
     response = make_response(pdf)
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    response.headers['content-Type'] = 'application/pdf'
+    response.headers['content-Disposition'] = 'inline: filename= hello.pdf'
     return response
-
 
 
 
