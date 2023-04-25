@@ -490,47 +490,38 @@ def editsupplier(supplier):
         return render_template('employee/addsupplier.html', suppliers=suppliers, error='Error in updating db....')
     return redirect(url_for('logoutall'))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#admin, employee -> purchase product for the shop
 @app.route('/purchase/',methods=['POST','GET'])
 def purchase():
-    suppliers=db.view_suppliers()
-    products = db.view_products()
-    return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=1)
+    if 'admin' in session or 'employee' in session:
+        suppliers=db.view_suppliers()
+        products = db.view_products()
+        if request.method == 'GET':
+            return render_template('employee/addpurchase.html',suppliers = suppliers,products=products)
+        product = request.form['product']
+        supplier = request.form['supplier']
+        if supplier == '' or product == '':
+            return "please select any one option"
+        return redirect(url_for('purchase2',product_id=int(product),supplier=supplier))
+    return redirect(url_for('logoutall'))
 
-@app.route('/purchase/2',methods=['POST','GET'])
-def purchase2():
-    suppliers=db.view_suppliers()
-    products = db.view_products()
-    return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=2)
-
-@app.route('/purchase/3',methods=['POST','GET'])
-def purchase3():
-    suppliers=db.view_suppliers()
-    products = db.view_products()
-    return render_template('employee/purchase.html',suppliers = suppliers,products=products,page=3)
-
-@app.route('/billing/')
-def billing():
-    billing = db.view_billing()
-    return render_template('employee/billing.html',orders=billing)
+#admin, employee -> purchase done
+@app.route('/purchase/<int:product_id>/<string:supplier>',methods=['POST','GET'])
+def purchase2(product_id,supplier):
+    if 'admin' in session or 'employee' in session:
+        product = db.get_product_details_by_id(product_id)
+        if request.method =='GET':
+            product = db.get_product_details_by_id(product_id)
+            return render_template('employee/purchaseconfirm.html',supplier = supplier,product=product)
+        total_product = request.form['total_product']
+        if total_product == None:
+            return render_template('/employee/purchase_verified.html',value='error')
+        make_purchase = db.make_purchase_for_shop(product_id,supplier,product[3],total_product,(float(total_product)*float(product[5])))
+        add_quantity = db.update_product_quantity_after_purchase(product_id,total_product)
+        if make_purchase and add_quantity:
+            return render_template('/employee/purchase_verified.html',value='success')
+        return render_template('/employee/purchase_verified.html',value='error')
+    return redirect(url_for('logoutall'))
 
 @app.route('/salesemp/')
 def salebyemployee():
@@ -538,11 +529,16 @@ def salebyemployee():
     customers= db.view_customers()
     return render_template('employee/sales_customer.html',products=products,customers=customers)
 
-@app.route('/salesemp2/',methods=['GET','POST'])
-def salebyemployee2():
-    products= db.view_products()
-    customers= db.view_customers()
-    return render_template('employee/sales_customer2.html',products=products,customers=customers)
+
+
+
+
+
+@app.route('/billing/')
+def billing():
+    billing = db.view_billing()
+    return render_template('employee/billing.html',orders=billing)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)

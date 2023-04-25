@@ -431,8 +431,24 @@ class RiceDatabase:
         finally:
             self.close()
             return True
-
-
+        
+    def make_purchase_for_shop(self,product_id,supplier,bag,quantity,rop):
+        self.connect()
+        dop = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        values = (product_id,supplier,bag,quantity,rop)
+        sql = 'INSERT INTO purchase_details (product_id,supplier,bag,quantity,rop) VALUES ( %s, %s, %s, %s,%s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    def update_product_quantity_after_purchase(self, id, add_quantity):
+        self.connect()
+        self.cursor.execute("UPDATE product_details SET quantity = quantity + %s WHERE product_id = %s", (add_quantity, id))
+        self.conn.commit()
+        self.close()
+        return True
 
 
 
