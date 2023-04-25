@@ -452,10 +452,6 @@ class RiceDatabase:
         self.conn.commit()
         self.close()
         return True
-
-
-
-
     
     def view_billing(self):
         self.connect()

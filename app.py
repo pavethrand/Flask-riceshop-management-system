@@ -1,6 +1,7 @@
 #import required libraries
-from flask import Flask,render_template,request,url_for,redirect,session
+from flask import Flask,render_template,request,url_for,redirect,session,make_response,send_file
 import re
+import pdfkit
 
 #import database file
 from db import RiceDatabase
@@ -557,13 +558,45 @@ def salebyemployee2(product_id,username):
         return render_template('employee/purchase_verified.html',value='error')
     return redirect(url_for('logoutall'))
 
-
-
-
+#admin,employee -> billing page
 @app.route('/billing/')
 def billing():
     billing = db.view_billing()
     return render_template('employee/billing.html',orders=billing)
+
+#admin,employee -> cancelorder
+@app.route('/ecancelorder/<int:orderid>/<string:username>',methods=['GET','POST'])
+def eordercancelling(orderid,username):
+    if 'admin' in session or 'employee' in session:
+        print(request.method)
+        db.add_cancel_order_to_cancel_table(orderid,username)
+        get_quantity = db.get_order_quantity_by_id(orderid)
+        db.update_product_quantity_on_cancel(orderid,get_quantity[0])
+        update = db.update_order_details_to_cancel(orderid)
+        return redirect('/billing/')
+    return redirect(url_for('logoutall'))
+
+@app.route('/download_pdf/',methods=['GET','POST'])
+def download_pdf():
+    billing = db.view_billing()
+    html = render_template("employee/billing.html",orders=billing)
+    pdf = pdfkit.from_string(html, False)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
