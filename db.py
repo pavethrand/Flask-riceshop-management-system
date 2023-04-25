@@ -460,4 +460,21 @@ class RiceDatabase:
         self.close()
         return order
     
+     # add this function to update the status column
+    def update_mode_paid(self, orderid):
+        self.connect()
+        try:
+            sql = "UPDATE order_details SET status = 'PAID' WHERE order_id = %s"
+            self.cursor.execute(sql, (orderid,))
+            self.conn.commit()
+            return True
+        except mysql.connector.Error as e:
+            print(e)
+            return False
+        finally:
+            self.close()
+
+    def create_bill_for_id():
+        pass
+    
     
