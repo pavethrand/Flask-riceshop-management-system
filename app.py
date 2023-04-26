@@ -46,9 +46,9 @@ def logincus():
     password = request.form['password']
     res = db.check_login('customer',user,password)
     if res == True:
-        res_unverified,mobile=db.verify_cus(user)
+        res_unverified,mail=db.verify_cus(user)
         if res_unverified:
-            return redirect(url_for('verifyotp',number=mobile,user=user))
+            return redirect(url_for('verifyotp',mail=mail,user=user))
         #set session to login customer
         session['customer'] = user
         return redirect(url_for('cus_dashboard'))
@@ -71,9 +71,9 @@ def cussignup():
     fullname = request.form['fullname']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
-    mobile = request.form['mobile']
+    mail = request.form['email']
     address = request.form['address']
-    list = [username,fullname,password,confirm_password,mobile,address]
+    list = [username,fullname,password,confirm_password,mail,address]
     if db.check_customer_username(username):
         list[0]=''
         return render_template('customer/signup.html',message='username already exists',list=list)
@@ -101,27 +101,24 @@ def cussignup():
     elif password != confirm_password:
         list[3]=''
         return render_template('customer/signup.html',message='Password and Confirm Password must be same',list=list) 
-    elif bool(re.match('^[0-9]{10}$',mobile)) == False:
-        list[4]=''
-        return render_template('customer/signup.html',message='Enter Correct Mobile Number',list=list)
-    values_upload = db.customer_signup(username,fullname,password,mobile,address,verify=0)
+    elif not re.match(r'^[\w-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$', mail):
+        list[4] = ''
+        return render_template('customer/signup.html', message='Enter a valid email address', list=list)
+    values_upload = db.customer_signup(username,fullname,password,mail,address,verify=0)
     if values_upload > 0:
         #set session to signup
         session['unverified'] = username
-        return redirect(url_for('verifyotp',number=str(mobile),user=session['unverified']))
+        return redirect(url_for('verifyotp',mail=mail,user=session['unverified']))
     return render_template('customer/signup.html',message='Error in Signup.....',list=list)
 
 #customer->OTP Validation
-@app.route('/otp/<string:number>/<string:user>',methods=['GET','POST'])
-def verifyotp(number,user):
+@app.route('/otp/<string:mail>/<string:user>',methods=['GET','POST'])
+def verifyotp(mail,user):
     global generated_otp
     if request.method == 'GET':
         if session.get('unverified') == user:
             generated_otp=otp.generate_otp()
-            # message = 'Your OTP for Senthur Traders Verification - ',generated_otp
-            # response = sms_client.send_sms(number, message)
-            # print(response)
-            return render_template('customer/otp.html',number=number,user=user)
+            return render_template('customer/otp.html',mail=mail,user=user)
         return redirect(url_for('logincus',error=False))
     
     if session.get('unverified') == user:
@@ -327,7 +324,7 @@ def editcus():
              username = request.form.get('username')
              fullname = request.form.get('fullname')
              password = request.form.get('password')
-             mobile = request.form.get('mobile')
+             mail = request.form.get('email')
              address = request.form.get('address')
              if not (8 <= len(username) <= 15):
                 return render_template('employee/addcustomer.html',customers=customers,error="Username should be between 8 to 15 characters")
@@ -335,13 +332,13 @@ def editcus():
                 return render_template('employee/addcustomer.html',customers=customers,error="Enter Valid Full Name(5-40 characters)")
              if not (8 <= len(password) <= 20):
                 return render_template('employee/addcustomer.html',customers=customers,error="invalid password length (8-20 characters)")
-             if not (len(mobile) == 10 and mobile.isdigit()):
-                return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mobile number (10 numbers only)")
+             if not re.match(r'^[\w-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$', mail):
+                return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mail address")
              if len(address) == 0:
                 return render_template('employee/addcustomer.html',customers=customers,error="Enter address please....")
              if db.check_customer_username(username):
                  return render_template('employee/addcustomer.html',customers=customers,error="username already exists")
-             add_customer = db.customer_signup(username,fullname,password,mobile,address,verify=1)
+             add_customer = db.customer_signup(username,fullname,password,mail,address,verify=1)
              if add_customer:
                  return redirect('/editcustomer/')
              return render_template('employee/addemployee.html',customers=customers,error="Error in updating in db")
@@ -366,17 +363,17 @@ def editcustomer_page(username):
         if request.method == 'POST':
             fullname = request.form.get('fullname')
             password = request.form.get('password')
-            mobile = request.form.get('mobile')
+            mail = request.form.get('email')
             address = request.form.get('address')
             if not (5 <= len(fullname) <= 40):
                return render_template('employee/addcustomer.html',customers=customers,error="Enter Valid Full Name(5-40 characters)")
             if not (8 <= len(password) <= 20):
                return render_template('employee/addcustomer.html',customers=customers,error="invalid password length (8-20 characters)")
-            if not (len(mobile) == 10 and mobile.isdigit()):
-               return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mobile number (10 numbers only)")
+            if not re.match(r'^[\w-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$', mail):
+                return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mail address")
             if len(address) == 0:
                return render_template('employee/addcustomer.html',customers=customers,error="Enter address please....")
-            edit_customer = db.edit_customer_todb(username,fullname,password,mobile,address)
+            edit_customer = db.edit_customer_todb(username,fullname,password,mail,address)
             if edit_customer:
                 return redirect('/editcustomer/')
             return render_template('employee/addemployee.html',customers=customers,error="Error in updating in db")

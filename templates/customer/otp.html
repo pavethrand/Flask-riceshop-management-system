@@ -113,11 +113,11 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title text-center mb-4">OTP sent to +91 {{number}}</h4>
+          <h4 class="card-title text-center mb-4">OTP sent to {{mail}}</h4>
           <h2 class="card-subtitle text-center mb-4">Enter the four digit OTP</h2>
           <div class="row justify-content-center">
             <div class="col-md-8">
-              <form class="row g-3" method="post" action="{{ url_for('verifyotp', number=number, user=user) }}">
+              <form class="row g-3" method="post" action="{{ url_for('verifyotp', mail=mail, user=user) }}">
                 <div class="col-md-3">
                   <input type="text" class="form-control" name="otp1" id="otp1" placeholder="-" maxlength="1" required>
                 </div>

@@ -165,10 +165,10 @@
                 <div class="invalid-feedback">Passwords do not match.</div>
               </div>
               <div class="form-floating mb-3">
-                <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Mobile Number" minlength="10" maxlength="10" pattern="[0-9]{10}" value="{{list[4]}}" required>
-                <label for="mobile">Mobile Number (10 digits)</label>
-                <div class="invalid-feedback">Please enter a valid mobile number (10 digits).</div>
-              </div>
+                <input type="email" class="form-control" id="mail" name="mail" placeholder="Email Address" value="{{list[4]}}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <label for="email">Email Address</label>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>            
               <div class="form-floating mb-3">
                 <textarea class="form-control" id="address" name="address" placeholder="Address" maxlength="50" rows="3">{{list[5]}}</textarea>
                 <label for="address">Address (up to 50 characters)</label>

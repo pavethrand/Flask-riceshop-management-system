@@ -35,9 +35,10 @@
                 <input type="password" class="form-control" id="password" name="password" minlength="8" maxlength="20" value="{{edit_value[2]}}" required>
               </div>
               <div class="mb-3">
-                <label for="mobile" class="form-label">Mobile (10 numbers)</label>
-                <input type="tel" class="form-control" id="mobile" name="mobile" minlength="10" maxlength="10" pattern="[0-9]{10}" value="{{edit_value[3]}}" required>
-              </div>
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="example@example.com" value="{{ edit_value[3] }}" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>              
               <div class="mb-3">
                 <label for="address" class="form-label">Address (up to 50 characters)</label>
                 <textarea class="form-control" id="address" name="address" maxlength="50" required>{{edit_value[4]}}</textarea>
@@ -60,7 +61,7 @@
                 <tr>
                   <th>Username</th>
                   <th>Full Name</th>
-                  <th>Mobile</th>
+                  <th>Email</th>
                   <th>Actions</th>
                 </tr>
               </thead>

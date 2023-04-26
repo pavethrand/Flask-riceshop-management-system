@@ -39,14 +39,14 @@ class RiceDatabase:
     def verify_cus(self,username):
         self.connect()
         tablename='customer'
-        query = "SELECT mobile FROM {} WHERE username = %s AND verified = 0".format(tablename)
+        query = "SELECT mail FROM {} WHERE username = %s AND verified = 0".format(tablename)
         values = (username,)
         self.cursor.execute(query, values)
         result = self.cursor.fetchone()
         self.close()
         if result:
-            mobile = result[0]
-            return True, mobile
+            mail = result[0]
+            return True, mail
         return False, None
     
     #customer -> check the username is already present in db or not
@@ -59,11 +59,11 @@ class RiceDatabase:
         return bool(result)
     
     #customer -> customer_signup
-    def customer_signup(self,username,fullname,password,mobile,address,verify):
+    def customer_signup(self,username,fullname,password,mail,address,verify):
         self.connect()
         dor = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        values = (username, fullname, password, mobile, address, dor, verify)
-        sql = 'INSERT INTO customer (username, fullname, password, mobile, address, dor, verified) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+        values = (username, fullname, password, mail, address, dor, verify)
+        sql = 'INSERT INTO customer (username, fullname, password, mail, address, dor, verified) VALUES (%s, %s, %s, %s, %s, %s, %s)'
         self.cursor.execute(sql, values)
         self.conn.commit()
         inserted = self.cursor.rowcount
@@ -302,7 +302,7 @@ class RiceDatabase:
     #admin,employee -> get_customer_details_by_username
     def get_customer_details_by_username(self,username):
         self.connect()
-        query= "SELECT username,fullname,password,mobile,address FROM customer where username = %s"
+        query= "SELECT username,fullname,password,mail,address FROM customer where username = %s"
         values=(username,)
         self.cursor.execute(query, values)
         customer_details = self.cursor.fetchone()
@@ -310,10 +310,10 @@ class RiceDatabase:
         return customer_details
     
     #admin,employee -> update customer
-    def edit_customer_todb(self, username, fullname, password, mobile, address):
+    def edit_customer_todb(self, username, fullname, password, mail, address):
         self.connect()
-        sql = "UPDATE customer SET fullname = %s, password = %s, mobile = %s, address = %s WHERE username = %s"
-        values = (fullname, password, mobile, address, username)
+        sql = "UPDATE customer SET fullname = %s, password = %s, mail = %s, address = %s WHERE username = %s"
+        values = (fullname, password, mail, address, username)
         try:
             self.cursor.execute(sql, values)
             self.conn.commit()
