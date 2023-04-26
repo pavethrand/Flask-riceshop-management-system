@@ -5,7 +5,7 @@ import pdfkit
 #from sendsms import Fast2SMS
 
 #sms initialize
-# sms_api_key = 'nZuqDhLCW4g3bYkmcETyONBt9Fso20alXdMR7rUx8Vi5SAvHpQGyA1WpoO6vnr90NszClM82iHTqbXkF'
+# sms_api_key = 'API_KEY'
 # sms_client = Fast2SMS(sms_api_key)
 
 #import database file
