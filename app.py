@@ -2,6 +2,11 @@
 from flask import Flask,render_template,request,url_for,redirect,session,make_response,send_file
 import re
 import pdfkit
+#from sendsms import Fast2SMS
+
+#sms initialize
+# sms_api_key = 'nZuqDhLCW4g3bYkmcETyONBt9Fso20alXdMR7rUx8Vi5SAvHpQGyA1WpoO6vnr90NszClM82iHTqbXkF'
+# sms_client = Fast2SMS(sms_api_key)
 
 #import database file
 from db import RiceDatabase
@@ -113,6 +118,9 @@ def verifyotp(number,user):
     if request.method == 'GET':
         if session.get('unverified') == user:
             generated_otp=otp.generate_otp()
+            # message = 'Your OTP for Senthur Traders Verification - ',generated_otp
+            # response = sms_client.send_sms(number, message)
+            # print(response)
             return render_template('customer/otp.html',number=number,user=user)
         return redirect(url_for('logincus',error=False))
     
@@ -569,66 +577,53 @@ def billing():
         return render_template('employee/billing.html',orders=billing)
     return redirect(url_for('logoutall'))
 
+def download_pdf(product_brand,product_category,order_id,bill_id,mode_of_payment,total_amount,customer_name,quantity,bag):  
+    rendered = render_template('employee/bill_generated.html',product_brand=product_brand,product_category=product_category,order_id=order_id,bill_id=bill_id,mode_of_payment=mode_of_payment,total_amount=total_amount,customer_name=customer_name,quantity=quantity,bag=bag)
+    pdf = pdfkit.from_string(rendered,False,configuration=config)
+    response = make_response(pdf)
+    response.headers['content-Type'] = 'application/pdf'
+    response.headers['content-Disposition'] = 'inline; filename= hello.pdf'
+    return response
+
 #admin,employee -> billing page - payment mode
-@app.route('/billing/<int:order_id>',methods=['GET','POST'])
+@app.route('/billing/<int:order_id>/',methods=['GET','POST'])
 def paymentmode(order_id):
     if 'admin' in session or 'employee' in session:
         if request.method =='GET':
             return render_template('employee/paymentmode.html',id=order_id)
         mode = request.form.get("mode")
+        ros = db.get_rate_from_order(order_id)
         if db.update_mode_paid(order_id):
-            
+            generated = db.generate_bill_db(order_id,mode,ros[0])
+            product_id = db.get_product_id_by_order_id(order_id) # 0=product_id 1 = username 2=quantity
+            product_details = db.get_product_details_by_id_for_bill(product_id[0]) #0-brand 1-category 2-availability
+            bill_details = db.get_bill_details_by_order_id(order_id) #0-bill id 1-mode 2-amount
+            product_brand=product_details[0]
+            product_category=product_details[1]
+            bill_id = bill_details[0]
+            mode_of_payment=bill_details[1]
+            total_amount=bill_details[2]
+            customer_name=product_id[1]
+            quantity=product_id[2]
+            bag=product_details[2]
+            rendered = render_template('employee/bill_generated.html',product_brand=product_brand,product_category=product_category,order_id=order_id,bill_id=bill_id,mode_of_payment=mode_of_payment,total_amount=total_amount,customer_name=customer_name,quantity=quantity,bag=bag)
+            pdf = pdfkit.from_string(rendered,False,configuration=config)
+            response = make_response(pdf)
+            response.headers['content-Type'] = 'application/pdf'
+            response.headers['content-Disposition'] = 'inline; filename= hello.pdf'
+            return response
     return redirect(url_for('logoutall'))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #admin,employee -> cancelorder
 @app.route('/ecancelorder/<int:orderid>/<string:username>',methods=['GET','POST'])
 def eordercancelling(orderid,username):
     if 'admin' in session or 'employee' in session:
-        print(request.method)
         db.add_cancel_order_to_cancel_table(orderid,username)
         get_quantity = db.get_order_quantity_by_id(orderid)
         db.update_product_quantity_on_cancel(orderid,get_quantity[0])
         update = db.update_order_details_to_cancel(orderid)
         return redirect('/billing/')
     return redirect(url_for('logoutall'))
-
-
-@app.route('/download_pdf/',methods=['GET','POST'])
-def download_pdf():
-    billing = db.view_billing()
-    rendered = render_template('employee/billing.html',orders=billing)
-    pdf = pdfkit.from_string(rendered,False,configuration=config)
-    response = make_response(pdf)
-    response.headers['content-Type'] = 'application/pdf'
-    response.headers['content-Disposition'] = 'inline: filename= hello.pdf'
-    return response
-
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)

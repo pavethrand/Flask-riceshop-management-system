@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bill Page</title>
+    <style>
+      /* Style for the logo */
+      .logo {
+        float: left;
+      }
+      /* Style for the shop name */
+      h1 {
+        font-family: Times New Roman;
+        text-align: center;
+      }
+      /* Style for the shop address */
+      .address {
+        text-align: center;
+      }
+      /* Style for the horizontal line */
+      hr {
+        border: 1px solid black;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        clear: both;
+      }
+      img{
+        height:3.55cm;
+        width: 4.74cm;
+      }
+      /* Style for the footer */
+      .footer {
+        text-align: right;
+        margin-top: 50px;
+      }
+      /* Style for the footer line */
+      .footer hr {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+      /* Style for the table */
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      /* Style for the table header */
+      th, td {
+        text-align: left;
+        padding: 8px;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Logo -->
+    
+    
+    <!-- Shop Name -->
+    <h1>SENTHUR TRADERS</h1>
+    
+    <!-- Shop Address -->
+    <div class="address">
+      Palladam Main Road, Murugampalayam<br>
+      Tiruppur 641 687
+    </div>
+    <hr>
+    <h2>Bill Details</h2>
+    <table>
+      <tr>
+        <th>Product Brand</th>
+        <td>{{ product_brand }}</td>
+      </tr>
+      <tr>
+        <th>Product Category</th>
+        <td>{{ product_category }}</td>
+      </tr>
+      <tr>
+        <th>Order ID</th>
+        <td>{{ order_id }}</td>
+      </tr>
+      <tr>
+        <th>Bill ID</th>
+        <td>{{ bill_id }}</td>
+      </tr>
+      <tr>
+        <th>Mode of Payment</th>
+        <td>{{ mode_of_payment }}</td>
+      </tr>
+      <tr>
+        <th>Total Amount</th>
+        <td>{{ total_amount }}</td>
+      </tr>
+      <tr>
+        <th>Customer Name</th>
+        <td>{{ customer_name }}</td>
+      </tr>
+      <tr>
+        <th>Quantity</th>
+        <td>{{ quantity }}</td>
+      </tr>
+      <tr>
+        <th>Bag (in kg)</th>
+        <td>{{ bag }}</td>
+      </tr>
+    </table>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div>SIGNATURE</div>
+      <hr style="margin-left: 10px; margin-right: 10px; margin-top: 2px; margin-bottom: 0px;">
+    </div>
+
+  </body>
+</html>

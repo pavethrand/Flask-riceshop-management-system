@@ -437,8 +437,8 @@ class RiceDatabase:
     def make_purchase_for_shop(self,product_id,supplier,bag,quantity,rop):
         self.connect()
         dop = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        values = (product_id,supplier,bag,quantity,rop)
-        sql = 'INSERT INTO purchase_details (product_id,supplier,bag,quantity,rop) VALUES ( %s, %s, %s, %s,%s)'
+        values = (product_id,supplier,bag,quantity,rop,dop)
+        sql = 'INSERT INTO purchase_details (product_id,supplier,bag,quantity,rop,dop) VALUES ( %s, %s, %s, %s,%s,%s)'
         self.cursor.execute(sql, values)
         self.conn.commit()
         inserted = self.cursor.rowcount
@@ -474,7 +474,54 @@ class RiceDatabase:
         finally:
             self.close()
 
-    def create_bill_for_id():
-        pass
+    def get_rate_from_order(self,order_id):
+        self.connect()
+        query= "SELECT roo FROM order_details where order_id = %s"
+        values=(order_id,)
+        self.cursor.execute(query, values)
+        rate = self.cursor.fetchone()
+        self.close()
+        return rate
+    
+    def generate_bill_db(self,order_id,mode,ros):
+        self.connect()
+        dob = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        values = (order_id,mode,ros,dob)
+        sql = 'INSERT INTO billing (order_id,mode,ros,dob) VALUES (%s, %s, %s,%s)'
+        self.cursor.execute(sql, values)
+        self.conn.commit()
+        inserted = self.cursor.rowcount
+        self.close()
+        return inserted
+    
+    def get_product_id_by_order_id(self,order_id):
+        self.connect()
+        query= "SELECT product_id,username,quantity FROM order_details where order_id = %s"
+        values=(order_id,)
+        self.cursor.execute(query, values)
+        id = self.cursor.fetchone()
+        self.close()
+        return id
+    
+    def get_product_details_by_id_for_bill(self,product_id):
+        self.connect()
+        query= "SELECT brand,category,availability FROM product_details where product_id = %s"
+        values=(product_id,)
+        self.cursor.execute(query, values)
+        details = self.cursor.fetchone()
+        self.close()
+        return details
+    
+    def get_bill_details_by_order_id(self,order_id):
+        self.connect()
+        query= "SELECT bill_id,mode,ros FROM billing where order_id = %s"
+        values=(order_id,)
+        self.cursor.execute(query, values)
+        id = self.cursor.fetchone()
+        self.close()
+        return id
+
+
+        
     
     
