@@ -520,6 +520,16 @@ class RiceDatabase:
         id = self.cursor.fetchone()
         self.close()
         return id
+    
+    def get_mail_id_of_customer_unverified_by_username(self,username):
+        self.connect()
+        query= "SELECT mail FROM customer where username = %s"
+        values=(username,)
+        self.cursor.execute(query, values)
+        mail = self.cursor.fetchone()
+        self.close()
+        return mail
+
 
 
         

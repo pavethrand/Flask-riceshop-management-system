@@ -2,17 +2,15 @@
 from flask import Flask,render_template,request,url_for,redirect,session,make_response,send_file
 import re
 import pdfkit
-#from sendsms import Fast2SMS
-
-#sms initialize
-# sms_api_key = 'API_KEY'
-# sms_client = Fast2SMS(sms_api_key)
 
 #import database file
 from db import RiceDatabase
 
 #import OTP class
 from otp import OTPGenerator
+from notification import Notification
+
+notify = Notification()
 
 #create app
 app = Flask(__name__)
@@ -118,6 +116,9 @@ def verifyotp(mail,user):
     if request.method == 'GET':
         if session.get('unverified') == user:
             generated_otp=otp.generate_otp()
+            user_mail = db.get_mail_id_of_customer_unverified_by_username(user)
+            user_mail1 = str(user_mail[0])
+            notify.otp_to_mail(user_mail1,generated_otp)
             return render_template('customer/otp.html',mail=mail,user=user)
         return redirect(url_for('logincus',error=False))
     
