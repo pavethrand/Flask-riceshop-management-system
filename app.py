@@ -2,6 +2,9 @@
 from flask import Flask,render_template,request,url_for,redirect,session,make_response,send_file
 import re
 import pdfkit
+from io import BytesIO
+import datetime
+import timedelta
 
 #import database file
 from db import RiceDatabase
@@ -99,9 +102,9 @@ def cussignup():
     elif password != confirm_password:
         list[3]=''
         return render_template('customer/signup.html',message='Password and Confirm Password must be same',list=list) 
-    elif not re.match(r'^[\w-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$', mail):
-        list[4] = ''
-        return render_template('customer/signup.html', message='Enter a valid email address', list=list)
+    elif not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', mail):
+         list[4] = ''
+         return render_template('customer/signup.html', message='Enter a valid email address', list=list)
     values_upload = db.customer_signup(username,fullname,password,mail,address,verify=0)
     if values_upload > 0:
         #set session to signup
@@ -117,8 +120,7 @@ def verifyotp(mail,user):
         if session.get('unverified') == user:
             generated_otp=otp.generate_otp()
             user_mail = db.get_mail_id_of_customer_unverified_by_username(user)
-            user_mail1 = str(user_mail[0])
-            notify.otp_to_mail(user_mail1,generated_otp)
+            notify.otp_to_mail(str(user_mail[0]),generated_otp)
             return render_template('customer/otp.html',mail=mail,user=user)
         return redirect(url_for('logincus',error=False))
     
@@ -132,6 +134,8 @@ def verifyotp(mail,user):
             generated_otp = None
             updated = db.verify_otp(user)
             if updated > 0:
+                user_mail = db.get_mail_id_of_customer_unverified_by_username(user)
+                notify.account_creation_mail(str(user_mail[0]))
                 return render_template('/customer/otp_verified.html', value="success")
             return render_template('/customer/otp_verified.html', value="db_error")
         return render_template('/customer/otp_verified.html', value="otp_error")
@@ -187,6 +191,8 @@ def order_done():
     if order_add:
         reduce_product = db.reduce_product(product_id,check_availability[0]-int(total_product))
         if reduce_product:
+            user_mail = db.get_mail_id_of_customer_unverified_by_username(session['customer'])
+            notify.order_notification_mail(str(user_mail[0]))
             return render_template('customer/orderdone.html',value='success')
     return render_template('customer/orderdone.html',value='error')
 
@@ -207,6 +213,8 @@ def ordercancelling(orderid):
     get_quantity = db.get_order_quantity_by_id(orderid)
     db.update_product_quantity_on_cancel(orderid,get_quantity[0])
     update = db.update_order_details_to_cancel(orderid)
+    user_mail = db.get_mail_id_of_customer_unverified_by_username(session['customer'])
+    notify.order_cancellation_mail(str(user_mail[0]))
     return redirect('/cordercancel/')
 
 @app.route('/corderhistory/')
@@ -333,7 +341,7 @@ def editcus():
                 return render_template('employee/addcustomer.html',customers=customers,error="Enter Valid Full Name(5-40 characters)")
              if not (8 <= len(password) <= 20):
                 return render_template('employee/addcustomer.html',customers=customers,error="invalid password length (8-20 characters)")
-             if not re.match(r'^[\w-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$', mail):
+             if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', mail):
                 return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mail address")
              if len(address) == 0:
                 return render_template('employee/addcustomer.html',customers=customers,error="Enter address please....")
@@ -341,6 +349,7 @@ def editcus():
                  return render_template('employee/addcustomer.html',customers=customers,error="username already exists")
              add_customer = db.customer_signup(username,fullname,password,mail,address,verify=1)
              if add_customer:
+                 notify.account_creation_mail(mail)
                  return redirect('/editcustomer/')
              return render_template('employee/addemployee.html',customers=customers,error="Error in updating in db")
     return redirect(url_for('logoutall'))
@@ -370,7 +379,7 @@ def editcustomer_page(username):
                return render_template('employee/addcustomer.html',customers=customers,error="Enter Valid Full Name(5-40 characters)")
             if not (8 <= len(password) <= 20):
                return render_template('employee/addcustomer.html',customers=customers,error="invalid password length (8-20 characters)")
-            if not re.match(r'^[\w-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9.]+$', mail):
+            if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', mail):
                 return render_template('employee/addcustomer.html',customers=customers,error="Error due to invalid mail address")
             if len(address) == 0:
                return render_template('employee/addcustomer.html',customers=customers,error="Enter address please....")
@@ -394,6 +403,8 @@ def vercus_by_username(username):
     if 'admin' in session or 'employee' in session:
         vcustomers = db.verify_otp(username)
         if vcustomers:
+            user_mail = db.get_mail_id_of_customer_unverified_by_username(username)
+            notify.account_verified_by_shop(str(user_mail[0]))
             return redirect('/verifycustomer/')
         return "<html><body><script>alert('Unble to verify customer')"
     return redirect(url_for('logoutall'))
@@ -563,6 +574,8 @@ def salebyemployee2(product_id,username):
         if order_add:
             reduce_product = db.reduce_product(product_id,check_availability[0]-int(total_product))
             if reduce_product:
+                user_mail = db.get_mail_id_of_customer_unverified_by_username(username)
+                notify.order_notification_mail(str(user_mail[0]))
                 return render_template('employee/purchase_verified.html',value='success')
         return render_template('employee/purchase_verified.html',value='error')
     return redirect(url_for('logoutall'))
@@ -574,14 +587,6 @@ def billing():
         billing = db.view_billing()
         return render_template('employee/billing.html',orders=billing)
     return redirect(url_for('logoutall'))
-
-def download_pdf(product_brand,product_category,order_id,bill_id,mode_of_payment,total_amount,customer_name,quantity,bag):  
-    rendered = render_template('employee/bill_generated.html',product_brand=product_brand,product_category=product_category,order_id=order_id,bill_id=bill_id,mode_of_payment=mode_of_payment,total_amount=total_amount,customer_name=customer_name,quantity=quantity,bag=bag)
-    pdf = pdfkit.from_string(rendered,False,configuration=config)
-    response = make_response(pdf)
-    response.headers['content-Type'] = 'application/pdf'
-    response.headers['content-Disposition'] = 'inline; filename= hello.pdf'
-    return response
 
 #admin,employee -> billing page - payment mode
 @app.route('/billing/<int:order_id>/',methods=['GET','POST'])
@@ -604,12 +609,15 @@ def paymentmode(order_id):
             customer_name=product_id[1]
             quantity=product_id[2]
             bag=product_details[2]
+            user_mail = db.get_mail_id_of_customer_unverified_by_username(customer_name)
             rendered = render_template('employee/bill_generated.html',product_brand=product_brand,product_category=product_category,order_id=order_id,bill_id=bill_id,mode_of_payment=mode_of_payment,total_amount=total_amount,customer_name=customer_name,quantity=quantity,bag=bag)
             pdf = pdfkit.from_string(rendered,False,configuration=config)
             response = make_response(pdf)
+            pdf_bytes = BytesIO(pdf)
             response.headers['content-Type'] = 'application/pdf'
-            response.headers['content-Disposition'] = 'inline; filename= hello.pdf'
-            return response
+            response.headers['content-Disposition'] = 'inline; filename='+str(bill_id)+'.pdf'
+            notify.bill_generated_for_your_order(str(user_mail[0]),pdf_bytes)
+            return redirect('/billing/')
     return redirect(url_for('logoutall'))
 
 #admin,employee -> cancelorder
@@ -622,6 +630,24 @@ def eordercancelling(orderid,username):
         update = db.update_order_details_to_cancel(orderid)
         return redirect('/billing/')
     return redirect(url_for('logoutall'))
+
+@app.route('/reportselector/',methods=['GET','POST'])
+def generate_report():
+    return render_template('employee/generate_report.html')
+
+@app.route('/generate_report', methods=['POST'])
+def generate_report1():
+    # Get the selected report type
+    report_type = request.form.get('report_type')
+    # Get the selected month
+    month_year_str = request.form.get('month')
+    month, year = map(int, month_year_str.split('/'))
+    first_day = datetime.date(year, month, 1)
+    last_day = datetime.date(year, month, 28) + datetime.timedelta(days=4)  # Add 4 days to handle edge case of Feb 29th
+    print(first_day)
+    print(last_day)
+    return "done"
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000,debug=True)

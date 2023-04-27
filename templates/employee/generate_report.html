@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Generate Report</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  <!-- Bootstrap Datepicker CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+.form-group{
+    width:150px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+
+  </style>
+
+</head>
+<body>
+  <div class="container my-5">
+    <h1 class="text-center mb-4">Generate Report</h1>
+    <form action="/generate_report" method="POST">
+      <div class="form-group mb-4">
+        <label for="month">Select Month:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="month-picker" name="month" placeholder="MM/YYYY">
+          <button class="btn btn-outline-secondary" type="button" id="month-picker-btn">
+            <i class="bi bi-calendar"></i>
+          </button>
+        </div>
+      </div>
+      <div class="form-group mb-4">
+        <label>Report Type:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="report_type" id="sales_report" value="sales" checked>
+          <label class="form-check-label" for="sales_report">
+            Sales Report
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="report_type" id="purchase_report" value="purchase">
+          <label class="form-check-label" for="purchase_report">
+            Purchase Report
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" id="generate-btn" disabled>Generate Report</button>
+    </form>
+  </div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Datepicker JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Initialize datepicker
+      $('#month-picker').datepicker({
+        format: 'mm/yyyy',
+        autoclose: true,
+        minViewMode: 'months',
+        endDate: '0d'
+      });
+      // Enable Generate button when a month is selected
+      $('#month-picker').change(function() {
+        var month = $('#month-picker').val();
+        if (month) {
+          $('#generate-btn').prop('disabled', false);
+        } else {
+          $('#generate-btn').prop('disabled', true);
+        }
+      });
+      // Show datepicker on button click
+      $('#month-picker-btn').click(function() {
+        $('#month-picker').datepicker('show');
+      });
+    });
+  </script>
+</body>
+</html>
